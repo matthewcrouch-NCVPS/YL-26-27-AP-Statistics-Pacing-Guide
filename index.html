@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AP Statistics: Regular Start YL 2026–2027 Calendar</title>
+<style>
+:root{
+  --ink:#17233B; --mut:#576479; --line:#D8DEE8; --soft:#F4F6FA; --sel:#E3ECF8;
+  --learn-bg:#EDF0F5; --learn-fg:#3A4963; --learn:#8C98AD;
+  --prac-bg:#DCF3FC;  --prac-fg:#0A5C80;  --prac:#18B0E8;
+  --assess-bg:#EDE3F8;--assess-fg:#5B2D91;--assess:#7A44B8;
+  --close-bg:#FDE9D9; --close-fg:#9A3F06; --close:#D9480F;
+  --today:#C2410C; --green:#A3C93A; --green-dk:#3F6212; --green-bg:#E7F3C6;
+  --serif:Georgia,"Iowan Old Style","Palatino Linotype",Palatino,serif;
+  --sans:"Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#fff;color:var(--ink);font:14px/1.45 var(--sans);-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid #1C7ED6;outline-offset:2px}
+.app{max-width:1120px;margin:0 auto;padding:14px 14px 22px;font-variant-numeric:tabular-nums}
+
+/* header */
+.top{display:flex;gap:12px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap}
+h1{font:700 27px/1.1 var(--serif);margin:0;letter-spacing:-.01em}
+.brand{display:block;height:46px;width:auto;margin:0 0 10px}
+.ribbon{height:5px;border-radius:99px;margin:12px 0 0;background:linear-gradient(90deg,var(--green) 0 62%,var(--prac) 62% 100%)}
+.sub{margin:4px 0 0;color:var(--mut)}
+.btn{border:1px solid var(--ink);background:#fff;border-radius:8px;padding:7px 12px;font-weight:600}
+.btn:hover{background:var(--ink);color:#fff}
+.policy{margin:10px 0 0;border:1px solid var(--line);border-radius:8px;background:var(--soft)}
+.policy summary{padding:8px 12px;cursor:pointer;font-weight:600}
+.policy p{margin:0;padding:0 12px 10px;max-width:70ch}
+
+/* at a glance */
+.glance{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin:12px 0}
+.g{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;text-align:left;display:block;width:100%}
+.g .k{display:block;color:var(--mut);font-size:12.5px}
+.g .v{display:block;font:700 24px/1.15 var(--serif);margin-top:2px}
+.g .s{display:block;color:var(--mut);font-size:12.5px;margin-top:2px}
+button.g:hover{border-color:var(--ink);background:var(--soft)}
+button.g.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.g.now .v{font-size:19px}
+.prog{height:7px;border-radius:99px;background:var(--line);margin-top:8px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--green)}
+
+/* year chart (week dotplot) */
+.chart-wrap{border:1px solid var(--line);border-radius:10px;padding:10px 10px 8px;margin-bottom:12px}
+.cap{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;justify-content:space-between;margin:0 2px 6px;color:var(--mut);font-size:12.5px}
+.cap b{color:var(--ink);font-size:13.5px}
+.key{display:inline-flex;gap:12px;align-items:center}
+.key span{display:inline-flex;gap:5px;align-items:center}
+.key i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.strip,.ticks,.mods{display:grid;grid-template-columns:repeat(var(--nw),minmax(0,1fr));gap:1px}
+.col{border:0;background:none;padding:2px 0 3px;border-radius:4px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:calc(var(--maxd) * (clamp(5px,1.15vw,11px) + 2px) + 8px)}
+.col .dots{display:flex;flex-direction:column-reverse;gap:2px;align-items:center}
+.dot{width:clamp(5px,1.15vw,11px);height:clamp(5px,1.15vw,11px);border-radius:50%;background:var(--prac)}
+.dot.a{background:var(--assess)} .dot.l{background:var(--learn)}
+.col:hover{background:var(--soft)}
+.col.sel{background:var(--sel)}
+.col.cur{box-shadow:inset 0 -3px 0 var(--today)}
+.col.brk{background:repeating-linear-gradient(135deg,#F1F3F7,#F1F3F7 5px,#E4E8EF 5px,#E4E8EF 10px)}
+.col.brk.sel{background:var(--sel)}
+.ticks{height:15px;margin-top:2px}
+.tk{font-size:11px;color:var(--mut);white-space:nowrap;overflow:visible;line-height:15px}
+.mods{margin-top:2px}
+.mband{border:0;border-radius:4px;background:#E9EEF6;color:var(--ink);font-size:11.5px;font-weight:700;padding:3px 0;overflow:hidden;white-space:nowrap}
+.mband:nth-child(even){background:#DCE4F1}
+.mband:hover{background:#C9D6EA}
+.mband.cur{background:var(--ink);color:#fff}
+
+/* toolbar */
+.bar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin-bottom:10px}
+.seg{display:inline-flex;border:1px solid var(--ink);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:#fff;padding:6px 12px;font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.nav{display:inline-flex;gap:4px;align-items:center}
+.ib{border:1px solid var(--line);background:#fff;border-radius:8px;width:32px;height:32px;font-size:18px;line-height:1}
+.ib:hover:not(:disabled){border-color:var(--ink)}
+.ib:disabled{opacity:.35;cursor:default}
+select,input[type=search]{font:inherit;border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:#fff;color:var(--ink)}
+input[type=search]{min-width:150px;flex:1 1 150px;max-width:260px}
+.chips{display:inline-flex;flex-wrap:wrap;gap:6px;margin-left:auto}
+.chip{border:1.5px solid transparent;border-radius:999px;padding:4px 10px;font-weight:600;font-size:12.5px}
+.chip[aria-pressed="false"]{background:#fff!important;color:var(--mut)!important;border-color:var(--line);text-decoration:line-through}
+.chip.learn{background:var(--learn-bg);color:var(--learn-fg)}
+.chip.practice{background:var(--prac-bg);color:var(--prac-fg)}
+.chip.assess{background:var(--assess-bg);color:var(--assess-fg)}
+.legend{margin:0 0 8px;color:var(--mut);font-size:12.5px}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;border-radius:3px;padding:0 5px;line-height:1.5;vertical-align:1px}
+.tag.due{background:var(--ink);color:#fff}
+.tag.cl{background:var(--close-bg);color:var(--close-fg);border-left:3px solid var(--close)}
+
+/* layout */
+.main{display:grid;gap:12px;grid-template-columns:minmax(0,1fr);align-items:start}
+.main.agenda{grid-template-columns:minmax(0,1fr)}
+.main.agenda .panel{display:none}
+@media (min-width:860px){
+  .main{grid-template-columns:minmax(0,1fr) 350px}
+  .panel{position:sticky;top:8px;max-height:min(780px,calc(100vh - 16px));overflow:auto}
+}
+
+/* month grid */
+.grid{display:grid;grid-template-columns:28px repeat(5,minmax(0,1fr)) repeat(2,minmax(0,.55fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.gh{background:var(--soft);font-size:12px;font-weight:700;color:var(--mut);text-align:center;padding:5px 0}
+.wkl{background:var(--soft);display:flex;align-items:flex-start;justify-content:center;padding-top:4px}
+.wkb{border:0;background:none;font-size:11px;font-weight:700;color:var(--mut);border-radius:4px;min-width:20px;padding:2px 0}
+.wkb:hover{background:var(--sel);color:var(--ink)}
+.wkb.sel{background:var(--ink);color:#fff}
+.day{background:#fff;border:0;text-align:left;padding:4px 4px 5px;min-height:96px;display:flex;flex-direction:column;gap:3px;align-items:stretch;color:inherit;border-radius:0;position:relative}
+.day:hover{background:var(--soft)}
+.day.insel{background:#F1F6FD}
+.day.out{background:#FAFBFD;color:#8E99AB}
+.day.out .pills{opacity:.6}
+.day.brk{background:repeating-linear-gradient(135deg,#F3F5F9,#F3F5F9 6px,#E8ECF2 6px,#E8ECF2 12px)}
+.day.nocourse{background:#FAFBFD}
+.day.focus{outline:2px solid var(--ink);outline-offset:-2px;z-index:1}
+.num{font-size:12px;font-weight:700;align-self:flex-start;line-height:1.4}
+.today .num{background:var(--today);color:#fff;border-radius:99px;padding:0 7px}
+.bl{font-size:10.5px;color:var(--mut);font-weight:600;line-height:1.2}
+.pills{display:flex;flex-direction:column;gap:3px}
+.pill{display:flex;justify-content:space-between;align-items:center;gap:4px;font-size:10.5px;line-height:1.25;padding:2px 5px;border-radius:4px;font-weight:600;overflow:hidden}
+.pill .pl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.pill .pt{flex:none;font-size:9.5px;font-weight:700;background:var(--ink);color:#fff;border-radius:3px;padding:0 4px}
+.pill.g-learn{background:var(--learn-bg);color:var(--learn-fg)}
+.pill.g-practice{background:var(--prac-bg);color:var(--prac-fg)}
+.pill.g-assess{background:var(--assess-bg);color:var(--assess-fg)}
+.pill.g-info{background:#fff;color:var(--ink);border:1px dashed #8C98AD}
+.pill.g-closes{background:var(--close-bg);color:var(--close-fg);border-left:3px solid var(--close)}
+.pill.is-done .pl{text-decoration:line-through;opacity:.65}
+.pill.dim{opacity:.22}
+@media (max-width:620px){
+  .day{min-height:52px;padding:3px}
+  .pills{flex-direction:row;flex-wrap:wrap;gap:3px}
+  .pill{width:9px;height:9px;padding:0;border-radius:50%;border:0}
+  .pill .pl,.pill .pt,.bl{display:none}
+  .pill.g-learn{background:var(--learn)} .pill.g-practice{background:var(--prac)} .pill.g-assess{background:var(--assess)}
+  .pill.g-info{background:#fff;border:2px solid var(--ink)} .pill.g-closes{background:var(--close);border:0}
+  h1{font-size:23px}
+}
+
+/* detail panel + agenda */
+.panel{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px;position:relative}
+.ph{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.ph .pt{flex:1;min-width:0}
+.ph h2{font:700 20px/1.2 var(--serif);margin:0}
+.ph p{margin:2px 0 0;color:var(--mut);font-size:12.5px}
+.link{border:0;background:none;color:#1C61B6;text-decoration:underline;padding:2px 0;font-weight:600}
+.note{color:var(--mut);font-size:12.5px;margin:2px 0 8px}
+.dayb{padding:9px 0 4px;border-top:1px solid var(--line)}
+.dayb.is-focus{background:#fff;border-radius:8px;border-top-color:transparent;box-shadow:0 0 0 2px var(--ink);padding:9px 8px 6px;margin:6px 0}
+.dh{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-weight:700}
+.dh .t{background:var(--today);color:#fff;border-radius:99px;padding:0 8px;font-size:11.5px}
+.dh .b{background:#E4E8EF;color:#3A4963;border-radius:99px;padding:0 8px;font-size:11.5px}
+.lt{margin:7px 0 0;font-size:12.5px;color:var(--mut);font-weight:600}
+.none{margin:3px 0 4px;color:var(--mut);font-size:12.5px}
+.row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 9px;align-items:start;background:#fff;border:1px solid var(--line);border-left:4px solid var(--learn);border-radius:7px;padding:7px 9px;margin-top:5px}
+.row.g-practice{border-left-color:var(--prac)} .row.g-assess{border-left-color:var(--assess)} .row.g-info{border-left-style:dashed}
+.row.noc{grid-template-columns:minmax(0,1fr) auto}
+.row input{margin:1px 0 0;width:20px;height:20px;accent-color:#5B8A0E;cursor:pointer}
+.ttl{font-weight:700;display:block}
+.ttl small{font-weight:500;color:var(--mut)}
+.les{display:block;color:var(--mut);font-size:12.5px}
+.dts{display:flex;flex-wrap:wrap;gap:1px 12px;font-size:12px;color:var(--mut);margin-top:2px}
+.dts em{font-style:normal;font-weight:700;color:var(--ink)}
+.dts .c em{color:var(--close-fg)}
+.row.is-done .ttl{text-decoration:line-through;color:var(--mut)}
+.st{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:99px;white-space:nowrap;align-self:start}
+.st-upcoming{background:var(--soft);color:var(--mut);border:1px solid var(--line)}
+.st-soon{background:#FFF0B3;color:#6B4E00}
+.st-today{background:var(--ink);color:#fff}
+.st-late{background:var(--close-bg);color:var(--close-fg)}
+.st-closed{background:#E7EAEE;color:#495057}
+.st-done{background:var(--green-bg);color:var(--green-dk)}
+@media (max-width:520px){ .st{grid-column:2;justify-self:start} .row.noc .st{grid-column:auto} }
+.closing{margin-top:6px;border:1px solid #F0C9A8;border-radius:8px;background:#FFF8F2}
+.closing>summary{padding:6px 9px;cursor:pointer;font-weight:600;color:var(--close-fg)}
+.closing .row{margin:0 6px 6px}
+.awk{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:#fff}
+.awk>summary::-webkit-details-marker{display:none}
+.awk>summary::before{content:'▸';color:var(--mut);width:1em}
+.awk[open]>summary::before{content:'▾'}
+.awk>summary{list-style:none;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;padding:9px 12px;cursor:pointer;font-weight:700}
+.awk>summary .m{font-weight:600;color:var(--mut);font-size:12.5px}
+.awk>summary .n{margin-left:auto;font-weight:600;font-size:12.5px;color:var(--mut)}
+.awk>summary .t{background:var(--today);color:#fff;border-radius:99px;padding:0 8px;font-size:11.5px}
+.awb{padding:0 12px 10px}
+.foot{color:var(--mut);font-size:12.5px;margin:12px 2px 0}
+.empty{padding:18px 6px;text-align:center;color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="top">
+    <div>
+      <img class="brand" alt="North Carolina Virtual Public School" src="data:image/png;base64,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">
+      <h1>AP Statistics: Regular Start YL</h1>
+      <p class="sub">Yearlong 2026–2027. What to do, when it’s due, and when it closes.</p>
+    </div>
+    <button class="btn" data-act="ics" title="Downloads an .ics file you can open in Google, Apple, or Outlook calendar">Add due dates to my calendar</button>
+  </header>
+  <div class="ribbon" aria-hidden="true"></div>
+
+  <details class="policy">
+    <summary>How due dates and late work work</summary>
+    <p>Work is due by its <b>due date</b>. Zeros are entered in Canvas after the due date for anything not submitted on time. Late work is still accepted through the <b>closing date</b> listed on each item. After that date the item is closed.</p>
+  </details>
+
+  <section class="glance" id="glance" aria-label="At a glance"></section>
+
+  <section class="chart-wrap" aria-label="Year at a glance">
+    <div class="cap">
+      <span><b>Work due each week.</b> Pick a week to see its details.</span>
+      <span class="key"><span><i style="background:var(--prac)"></i>Practice</span><span><i style="background:var(--assess)"></i>Checks &amp; tests</span><span>one dot = one item due</span></span>
+    </div>
+    <div id="chart"></div>
+  </section>
+
+  <div class="bar" role="toolbar" aria-label="Calendar controls">
+    <div class="seg" role="group" aria-label="View">
+      <button data-act="view-month" aria-pressed="true">Calendar</button>
+      <button data-act="view-agenda" aria-pressed="false">Week-by-week list</button>
+    </div>
+    <div class="nav" id="monthnav">
+      <button class="ib" data-act="m-prev" aria-label="Previous month">‹</button>
+      <select id="monthsel" aria-label="Month"></select>
+      <button class="ib" data-act="m-next" aria-label="Next month">›</button>
+      <button class="btn" data-act="today" style="padding:5px 10px">Today</button>
+    </div>
+    <input type="search" id="q" placeholder="Search lessons or assignments" aria-label="Search lessons or assignments">
+    <div class="chips" id="chips" role="group" aria-label="Show or hide item types">
+      <button class="chip learn" data-f="learn" aria-pressed="true">Notes &amp; CYK</button>
+      <button class="chip practice" data-f="practice" aria-pressed="true">Practice</button>
+      <button class="chip assess" data-f="assess" aria-pressed="true">Checks &amp; tests</button>
+    </div>
+  </div>
+  <p class="legend"><span class="tag due">due</span> due that day &nbsp;·&nbsp; <span class="tag cl">closes</span> last day late work is accepted &nbsp;·&nbsp; the number on the left of each calendar row is the week.</p>
+
+  <div class="main" id="main">
+    <div id="cal"></div>
+    <aside class="panel" id="panel" aria-live="polite"></aside>
+  </div>
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+(function(){
+'use strict';
+/* ---------- data (generated from the pacing guide spreadsheet) ---------- */
+var DATA = {"items":[{"d":"2026-08-24","lesson":"Getting Started","mod":0,"t":"Getting Started","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-08-24|Getting Started|Getting Started"},{"d":"2026-08-25","lesson":"Getting Started","mod":0,"t":"Getting Started CYK","k":"cyk","g":"learn","due":"2026-08-25","cl":"2026-11-02","id":"2026-08-25|Getting Started CYK|Getting Started"},{"d":"2026-08-26","lesson":"Getting Started","mod":0,"t":"Getting Started in AP Statistics CYK","k":"cyk","g":"learn","due":"2026-08-26","cl":"2026-11-02","id":"2026-08-26|Getting Started in AP Statistics CYK|Getting Started"},{"d":"2026-08-27","lesson":"1.1. Introducing Statistics & Variables","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-08-27|Notes|1.1. Introducing Statistics & Variables"},{"d":"2026-08-28","lesson":"1.1. Introducing Statistics & Variables","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-08-28|Notes|1.1. Introducing Statistics & Variables"},{"d":"2026-08-28","lesson":"1.1. Introducing Statistics & Variables","mod":1,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-08-28|CYK|1.1. Introducing Statistics & Variables"},{"d":"2026-08-31","lesson":"1.1. Introducing Statistics & Variables","mod":1,"t":"Activity 1 and 2","k":"activity","g":"practice","due":"2026-08-31","cl":"2026-11-02","id":"2026-08-31|Activity 1 and 2|1.1. Introducing Statistics & Variables"},{"d":"2026-09-01","lesson":"1.2. Categorical Tables and Graphs","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-09-01|Notes|1.2. Categorical Tables and Graphs"},{"d":"2026-09-02","lesson":"1.2. Categorical Tables and Graphs","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-09-02|Notes|1.2. Categorical Tables and Graphs"},{"d":"2026-09-02","lesson":"1.2. Categorical Tables and Graphs","mod":1,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-09-02|CYK|1.2. Categorical Tables and Graphs"},{"d":"2026-09-03","lesson":"1.2. Categorical Tables and Graphs","mod":1,"t":"Activity","k":"activity","g":"practice","due":"2026-09-03","cl":"2026-11-02","id":"2026-09-03|Activity|1.2. Categorical Tables and Graphs"},{"d":"2026-09-04","lesson":"1.3. Quantitative Graphs & Distribution Descriptions","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-09-04|Notes|1.3. Quantitative Graphs & Distribution Descriptions"},{"d":"2026-09-08","lesson":"1.3. Quantitative Graphs & Distribution Descriptions","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-09-08|Notes|1.3. Quantitative Graphs & Distribution Descriptions"},{"d":"2026-09-08","lesson":"1.3. Quantitative Graphs & Distribution Descriptions","mod":1,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-09-08|CYK|1.3. Quantitative Graphs & Distribution Descriptions"},{"d":"2026-09-09","lesson":"1.3. Quantitative Graphs & Distribution Descriptions","mod":1,"t":"Activity","k":"activity","g":"practice","due":"2026-09-09","cl":"2026-11-02","id":"2026-09-09|Activity|1.3. Quantitative Graphs & Distribution Descriptions"},{"d":"2026-09-10","lesson":"1.4. Summary Statistics for Quantitative Data","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-09-10|Notes|1.4. Summary Statistics for Quantitative Data"},{"d":"2026-09-11","lesson":"1.4. Summary Statistics for Quantitative Data","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-09-11|Notes|1.4. Summary Statistics for Quantitative Data"},{"d":"2026-09-11","lesson":"1.4. Summary Statistics for Quantitative Data","mod":1,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-09-11|CYK|1.4. Summary Statistics for Quantitative Data"},{"d":"2026-09-14","lesson":"1.4. Summary Statistics for Quantitative Data","mod":1,"t":"Activity","k":"activity","g":"practice","due":"2026-09-15","cl":"2026-11-02","d2":"2026-09-15","id":"2026-09-14|Activity|1.4. Summary Statistics for Quantitative Data"},{"d":"2026-09-16","lesson":"Module 1","mod":1,"t":"Mid-Module Check-in","k":"checkin","g":"assess","due":"2026-09-16","cl":"2026-11-02","id":"2026-09-16|Mid-Module Check-in|Module 1"},{"d":"2026-09-17","lesson":"1.5. Boxplots, Five‑Number Summaries, and z‑scores","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-09-17|Notes|1.5. Boxplots, Five‑Number Summaries, and z‑scores"},{"d":"2026-09-18","lesson":"1.5. Boxplots, Five‑Number Summaries, and z‑scores","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-09-18|Notes|1.5. Boxplots, Five‑Number Summaries, and z‑scores"},{"d":"2026-09-18","lesson":"1.5. Boxplots, Five‑Number Summaries, and z‑scores","mod":1,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-09-18|CYK|1.5. Boxplots, Five‑Number Summaries, and z‑scores"},{"d":"2026-09-21","lesson":"1.5. Boxplots, Five‑Number Summaries, and z‑scores","mod":1,"t":"Activity","k":"activity","g":"practice","due":"2026-09-22","cl":"2026-11-20","d2":"2026-09-22","id":"2026-09-21|Activity|1.5. Boxplots, Five‑Number Summaries, and z‑scores"},{"d":"2026-09-23","lesson":"1.6. Investigative Questions and Types of Studies","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-09-23|Notes|1.6. Investigative Questions and Types of Studies"},{"d":"2026-09-24","lesson":"1.6. Investigative Questions and Types of Studies","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-09-24|Notes|1.6. Investigative Questions and Types of Studies"},{"d":"2026-09-24","lesson":"1.6. Investigative Questions and Types of Studies","mod":1,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-09-24|CYK|1.6. Investigative Questions and Types of Studies"},{"d":"2026-09-25","lesson":"1.6. Investigative Questions and Types of Studies","mod":1,"t":"Activity","k":"activity","g":"practice","due":"2026-09-25","cl":"2026-11-20","id":"2026-09-25|Activity|1.6. Investigative Questions and Types of Studies"},{"d":"2026-09-28","lesson":"1.7. Sampling Methods and Sources of Bias","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-09-28|Notes|1.7. Sampling Methods and Sources of Bias"},{"d":"2026-09-29","lesson":"1.7. Sampling Methods and Sources of Bias","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-09-29|Notes|1.7. Sampling Methods and Sources of Bias"},{"d":"2026-09-29","lesson":"1.7. Sampling Methods and Sources of Bias","mod":1,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-09-29|CYK|1.7. Sampling Methods and Sources of Bias"},{"d":"2026-09-30","lesson":"1.7. Sampling Methods and Sources of Bias","mod":1,"t":"Activity","k":"activity","g":"practice","due":"2026-09-30","cl":"2026-11-20","id":"2026-09-30|Activity|1.7. Sampling Methods and Sources of Bias"},{"d":"2026-10-01","lesson":"1.8. Experimental Design Fundamentals","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-10-01|Notes|1.8. Experimental Design Fundamentals"},{"d":"2026-10-02","lesson":"1.8. Experimental Design Fundamentals","mod":1,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-10-02|Notes|1.8. Experimental Design Fundamentals"},{"d":"2026-10-02","lesson":"1.8. Experimental Design Fundamentals","mod":1,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-10-02|CYK|1.8. Experimental Design Fundamentals"},{"d":"2026-10-05","lesson":"1.8. Experimental Design Fundamentals","mod":1,"t":"Activity","k":"activity","g":"practice","due":"2026-10-05","cl":"2026-11-20","id":"2026-10-05|Activity|1.8. Experimental Design Fundamentals"},{"d":"2026-10-06","lesson":"Module 1","mod":1,"t":"Review Discussion board","k":"discussion","g":"practice","due":"2026-10-06","cl":"2026-11-20","id":"2026-10-06|Review Discussion board|Module 1"},{"d":"2026-10-07","lesson":"Module 1","mod":1,"t":"Unit 1 Progress Check","k":"progress","g":"assess","due":"2026-10-07","cl":"2026-11-20","id":"2026-10-07|Unit 1 Progress Check|Module 1"},{"d":"2026-10-08","lesson":"Module 1","mod":1,"t":"Assignment","k":"assignment","g":"practice","due":"2026-10-08","cl":"2026-11-20","id":"2026-10-08|Assignment|Module 1"},{"d":"2026-10-09","lesson":"Module 1","mod":1,"t":"Assessment MCQ","k":"assessment","g":"assess","due":"2026-10-09","cl":"2026-11-20","id":"2026-10-09|Assessment MCQ|Module 1"},{"d":"2026-10-12","lesson":"Module 1","mod":1,"t":"Assessment FRQ","k":"assessment","g":"assess","due":"2026-10-12","cl":"2026-11-20","id":"2026-10-12|Assessment FRQ|Module 1"},{"d":"2026-10-13","lesson":"2.1. Two‑Way Tables & Categorical Relationships","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-10-13|Notes|2.1. Two‑Way Tables & Categorical Relationships"},{"d":"2026-10-14","lesson":"2.1. Two‑Way Tables & Categorical Relationships","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-10-14|Notes|2.1. Two‑Way Tables & Categorical Relationships"},{"d":"2026-10-14","lesson":"2.1. Two‑Way Tables & Categorical Relationships","mod":2,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-10-14|CYK|2.1. Two‑Way Tables & Categorical Relationships"},{"d":"2026-10-15","lesson":"2.1. Two‑Way Tables & Categorical Relationships","mod":2,"t":"Activity","k":"activity","g":"practice","due":"2026-10-15","cl":"2027-01-07","id":"2026-10-15|Activity|2.1. Two‑Way Tables & Categorical Relationships"},{"d":"2026-10-16","lesson":"2.2. Probability Basics & Simulation","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-10-16|Notes|2.2. Probability Basics & Simulation"},{"d":"2026-10-19","lesson":"2.2. Probability Basics & Simulation","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-10-19|Notes|2.2. Probability Basics & Simulation"},{"d":"2026-10-19","lesson":"2.2. Probability Basics & Simulation","mod":2,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-10-19|CYK|2.2. Probability Basics & Simulation"},{"d":"2026-10-19","lesson":"2.2. Probability Basics & Simulation","mod":2,"t":"Module 1 Take-two Activity Due","k":"taketwo","g":"practice","due":"2026-10-19","cl":"2026-10-19","id":"2026-10-19|Module 1 Take-two Activity Due|2.2. Probability Basics & Simulation"},{"d":"2026-10-20","lesson":"2.2. Probability Basics & Simulation","mod":2,"t":"Activity","k":"activity","g":"practice","due":"2026-10-20","cl":"2027-01-07","id":"2026-10-20|Activity|2.2. Probability Basics & Simulation"},{"d":"2026-10-21","lesson":"2.3. Conditional Probability, Independence & Joint Events","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-10-21|Notes|2.3. Conditional Probability, Independence & Joint Events"},{"d":"2026-10-22","lesson":"2.3. Conditional Probability, Independence & Joint Events","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-10-22|Notes|2.3. Conditional Probability, Independence & Joint Events"},{"d":"2026-10-22","lesson":"2.3. Conditional Probability, Independence & Joint Events","mod":2,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-10-22|CYK|2.3. Conditional Probability, Independence & Joint Events"},{"d":"2026-10-23","lesson":"2.3. Conditional Probability, Independence & Joint Events","mod":2,"t":"Activity","k":"activity","g":"practice","due":"2026-10-26","cl":"2027-01-07","d2":"2026-10-26","id":"2026-10-23|Activity|2.3. Conditional Probability, Independence & Joint Events"},{"d":"2026-10-27","lesson":"2.4. Discrete Random Variables & Parameters","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-10-27|Notes|2.4. Discrete Random Variables & Parameters"},{"d":"2026-10-28","lesson":"2.4. Discrete Random Variables & Parameters","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-10-28|Notes|2.4. Discrete Random Variables & Parameters"},{"d":"2026-10-28","lesson":"2.4. Discrete Random Variables & Parameters","mod":2,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-10-28|CYK|2.4. Discrete Random Variables & Parameters"},{"d":"2026-10-29","lesson":"2.4. Discrete Random Variables & Parameters","mod":2,"t":"Activity","k":"activity","g":"practice","due":"2026-10-30","cl":"2027-01-07","d2":"2026-10-30","id":"2026-10-29|Activity|2.4. Discrete Random Variables & Parameters"},{"d":"2026-11-02","lesson":"Module 2","mod":2,"t":"Mid-Module Check-in","k":"checkin","g":"assess","due":"2026-11-02","cl":"2027-01-07","id":"2026-11-02|Mid-Module Check-in|Module 2"},{"d":"2026-11-02","lesson":"Module 2","mod":2,"t":"Module 1 Take-two Activity Due","k":"taketwo","g":"practice","due":"2026-11-02","cl":"2026-11-02","id":"2026-11-02|Module 1 Take-two Activity Due|Module 2"},{"d":"2026-11-03","lesson":"2.5. The Binomial Distribution","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-11-03|Notes|2.5. The Binomial Distribution"},{"d":"2026-11-04","lesson":"2.5. The Binomial Distribution","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-11-04|Notes|2.5. The Binomial Distribution"},{"d":"2026-11-04","lesson":"2.5. The Binomial Distribution","mod":2,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-11-04|CYK|2.5. The Binomial Distribution"},{"d":"2026-11-05","lesson":"2.5. The Binomial Distribution","mod":2,"t":"Activity","k":"activity","g":"practice","due":"2026-11-06","cl":"2027-01-25","d2":"2026-11-06","id":"2026-11-05|Activity|2.5. The Binomial Distribution"},{"d":"2026-11-09","lesson":"2.6. Normal Distribution & z‑score Applications","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-11-09|Notes|2.6. Normal Distribution & z‑score Applications"},{"d":"2026-11-10","lesson":"2.6. Normal Distribution & z‑score Applications","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-11-10|Notes|2.6. Normal Distribution & z‑score Applications"},{"d":"2026-11-10","lesson":"2.6. Normal Distribution & z‑score Applications","mod":2,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-11-10|CYK|2.6. Normal Distribution & z‑score Applications"},{"d":"2026-11-12","lesson":"2.6. Normal Distribution & z‑score Applications","mod":2,"t":"Activity","k":"activity","g":"practice","due":"2026-11-13","cl":"2027-01-25","d2":"2026-11-13","id":"2026-11-12|Activity|2.6. Normal Distribution & z‑score Applications"},{"d":"2026-11-16","lesson":"2.7. Sampling Distributions Introduction","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-11-16|Notes|2.7. Sampling Distributions Introduction"},{"d":"2026-11-17","lesson":"2.7. Sampling Distributions Introduction","mod":2,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-11-17|Notes|2.7. Sampling Distributions Introduction"},{"d":"2026-11-17","lesson":"2.7. Sampling Distributions Introduction","mod":2,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-11-17|CYK|2.7. Sampling Distributions Introduction"},{"d":"2026-11-18","lesson":"2.7. Sampling Distributions Introduction","mod":2,"t":"Activity","k":"activity","g":"practice","due":"2026-11-19","cl":"2027-01-25","d2":"2026-11-19","id":"2026-11-18|Activity|2.7. Sampling Distributions Introduction"},{"d":"2026-11-20","lesson":"Module 2","mod":2,"t":"Review Discussion Board","k":"discussion","g":"practice","due":"2026-11-20","cl":"2027-01-25","id":"2026-11-20|Review Discussion Board|Module 2"},{"d":"2026-11-23","lesson":"Module 2","mod":2,"t":"Unit 2 Progress Check","k":"progress","g":"assess","due":"2026-11-23","cl":"2027-01-25","id":"2026-11-23|Unit 2 Progress Check|Module 2"},{"d":"2026-11-24","lesson":"Module 2","mod":2,"t":"Assignment","k":"assignment","g":"practice","due":"2026-11-24","cl":"2027-01-25","id":"2026-11-24|Assignment|Module 2"},{"d":"2026-11-25","lesson":"Module 2","mod":2,"t":"Assessment MCQ","k":"assessment","g":"assess","due":"2026-11-25","cl":"2027-01-25","id":"2026-11-25|Assessment MCQ|Module 2"},{"d":"2026-11-30","lesson":"Module 2","mod":2,"t":"Assessment FRQ","k":"assessment","g":"assess","due":"2026-11-30","cl":"2027-01-25","id":"2026-11-30|Assessment FRQ|Module 2"},{"d":"2026-12-01","lesson":"3.1. Estimators & Sampling Distributions for Proportions","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-12-01|Notes|3.1. Estimators & Sampling Distributions for Proportions"},{"d":"2026-12-02","lesson":"3.1. Estimators & Sampling Distributions for Proportions","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-12-02|Notes|3.1. Estimators & Sampling Distributions for Proportions"},{"d":"2026-12-02","lesson":"3.1. Estimators & Sampling Distributions for Proportions","mod":3,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-12-02|CYK|3.1. Estimators & Sampling Distributions for Proportions"},{"d":"2026-12-03","lesson":"3.1. Estimators & Sampling Distributions for Proportions","mod":3,"t":"Activity","k":"activity","g":"practice","due":"2026-12-03","cl":"2027-02-18","id":"2026-12-03|Activity|3.1. Estimators & Sampling Distributions for Proportions"},{"d":"2026-12-04","lesson":"3.2. Confidence Intervals for a Single Proportion","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-12-04|Notes|3.2. Confidence Intervals for a Single Proportion"},{"d":"2026-12-07","lesson":"3.2. Confidence Intervals for a Single Proportion","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-12-07|Notes|3.2. Confidence Intervals for a Single Proportion"},{"d":"2026-12-07","lesson":"3.2. Confidence Intervals for a Single Proportion","mod":3,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-12-07|CYK|3.2. Confidence Intervals for a Single Proportion"},{"d":"2026-12-07","lesson":"3.2. Confidence Intervals for a Single Proportion","mod":3,"t":"Module 2 Take-two Activity Due","k":"taketwo","g":"practice","due":"2026-12-07","cl":"2026-12-07","id":"2026-12-07|Module 2 Take-two Activity Due|3.2. Confidence Intervals for a Single Proportion"},{"d":"2026-12-08","lesson":"3.2. Confidence Intervals for a Single Proportion","mod":3,"t":"Activity","k":"activity","g":"practice","due":"2026-12-09","cl":"2027-02-18","d2":"2026-12-09","id":"2026-12-08|Activity|3.2. Confidence Intervals for a Single Proportion"},{"d":"2026-12-10","lesson":"3.3. Hypothesis Tests for a Single Proportion & p‑values","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-12-10|Notes|3.3. Hypothesis Tests for a Single Proportion & p‑values"},{"d":"2026-12-11","lesson":"3.3. Hypothesis Tests for a Single Proportion & p‑values","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2026-12-11|Notes|3.3. Hypothesis Tests for a Single Proportion & p‑values"},{"d":"2026-12-11","lesson":"3.3. Hypothesis Tests for a Single Proportion & p‑values","mod":3,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2026-12-11|CYK|3.3. Hypothesis Tests for a Single Proportion & p‑values"},{"d":"2026-12-14","lesson":"3.3. Hypothesis Tests for a Single Proportion & p‑values","mod":3,"t":"Activity","k":"activity","g":"practice","due":"2026-12-15","cl":"2027-02-18","d2":"2026-12-15","id":"2026-12-14|Activity|3.3. Hypothesis Tests for a Single Proportion & p‑values"},{"d":"2027-01-04","lesson":"3.4. Errors, Power, and Test Properties","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-01-04|Notes|3.4. Errors, Power, and Test Properties"},{"d":"2027-01-05","lesson":"3.4. Errors, Power, and Test Properties","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-01-05|Notes|3.4. Errors, Power, and Test Properties"},{"d":"2027-01-05","lesson":"3.4. Errors, Power, and Test Properties","mod":3,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-01-05|CYK|3.4. Errors, Power, and Test Properties"},{"d":"2027-01-06","lesson":"3.4. Errors, Power, and Test Properties","mod":3,"t":"Activity","k":"activity","g":"practice","due":"2027-01-06","cl":"2027-02-18","id":"2027-01-06|Activity|3.4. Errors, Power, and Test Properties"},{"d":"2027-01-07","lesson":"Module 3","mod":3,"t":"Mid-Module Check-in","k":"checkin","g":"assess","due":"2027-01-07","cl":"2027-02-18","id":"2027-01-07|Mid-Module Check-in|Module 3"},{"d":"2027-01-07","lesson":"Module 3","mod":3,"t":"Module 2 Take-two Activity Due","k":"taketwo","g":"practice","due":"2027-01-07","cl":"2027-01-07","id":"2027-01-07|Module 2 Take-two Activity Due|Module 3"},{"d":"2027-01-08","lesson":"3.5. Sampling Distributions & Confidence Intervals for Difference in Proportions","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-01-08|Notes|3.5. Sampling Distributions & Confidence Intervals for Difference in Proportions"},{"d":"2027-01-11","lesson":"3.5. Sampling Distributions & Confidence Intervals for Difference in Proportions","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-01-11|Notes|3.5. Sampling Distributions & Confidence Intervals for Difference in Proportions"},{"d":"2027-01-11","lesson":"3.5. Sampling Distributions & Confidence Intervals for Difference in Proportions","mod":3,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-01-11|CYK|3.5. Sampling Distributions & Confidence Intervals for Difference in Proportions"},{"d":"2027-01-12","lesson":"3.5. Sampling Distributions & Confidence Intervals for Difference in Proportions","mod":3,"t":"Activity","k":"activity","g":"practice","due":"2027-01-12","cl":"2027-03-15","id":"2027-01-12|Activity|3.5. Sampling Distributions & Confidence Intervals for Difference in Proportions"},{"d":"2027-01-13","lesson":"3.6. Two‑Sample Tests for Proportions","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-01-13|Notes|3.6. Two‑Sample Tests for Proportions"},{"d":"2027-01-14","lesson":"3.6. Two‑Sample Tests for Proportions","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-01-14|Notes|3.6. Two‑Sample Tests for Proportions"},{"d":"2027-01-14","lesson":"3.6. Two‑Sample Tests for Proportions","mod":3,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-01-14|CYK|3.6. Two‑Sample Tests for Proportions"},{"d":"2027-01-15","lesson":"3.6. Two‑Sample Tests for Proportions","mod":3,"t":"Activity","k":"activity","g":"practice","due":"2027-01-15","cl":"2027-03-15","id":"2027-01-15|Activity|3.6. Two‑Sample Tests for Proportions"},{"d":"2027-01-19","lesson":"3.7. Chi‑Square Tests: Independence and Homogeneity","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-01-19|Notes|3.7. Chi‑Square Tests: Independence and Homogeneity"},{"d":"2027-01-20","lesson":"3.7. Chi‑Square Tests: Independence and Homogeneity","mod":3,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-01-20|Notes|3.7. Chi‑Square Tests: Independence and Homogeneity"},{"d":"2027-01-20","lesson":"3.7. Chi‑Square Tests: Independence and Homogeneity","mod":3,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-01-20|CYK|3.7. Chi‑Square Tests: Independence and Homogeneity"},{"d":"2027-01-21","lesson":"3.7. Chi‑Square Tests: Independence and Homogeneity","mod":3,"t":"Activity","k":"activity","g":"practice","due":"2027-01-22","cl":"2027-03-15","d2":"2027-01-22","id":"2027-01-21|Activity|3.7. Chi‑Square Tests: Independence and Homogeneity"},{"d":"2027-01-25","lesson":"Module 3","mod":3,"t":"Review Discussion Board","k":"discussion","g":"practice","due":"2027-01-25","cl":"2027-03-15","id":"2027-01-25|Review Discussion Board|Module 3"},{"d":"2027-01-26","lesson":"Module 3","mod":3,"t":"Unit 3 Progress Check","k":"progress","g":"assess","due":"2027-01-26","cl":"2027-03-15","id":"2027-01-26|Unit 3 Progress Check|Module 3"},{"d":"2027-01-27","lesson":"Module 3","mod":3,"t":"Assignment","k":"assignment","g":"practice","due":"2027-01-27","cl":"2027-03-15","id":"2027-01-27|Assignment|Module 3"},{"d":"2027-01-28","lesson":"Module 3","mod":3,"t":"Assessment MCQ","k":"assessment","g":"assess","due":"2027-01-28","cl":"2027-03-15","id":"2027-01-28|Assessment MCQ|Module 3"},{"d":"2027-01-29","lesson":"Module 3","mod":3,"t":"Assessment FRQ","k":"assessment","g":"assess","due":"2027-01-29","cl":"2027-03-15","id":"2027-01-29|Assessment FRQ|Module 3"},{"d":"2027-02-01","lesson":"4.1. Sampling Distributions for Means","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-02-01|Notes|4.1. Sampling Distributions for Means"},{"d":"2027-02-01","lesson":"4.1. Sampling Distributions for Means","mod":4,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-02-01|CYK|4.1. Sampling Distributions for Means"},{"d":"2027-02-02","lesson":"4.1. Sampling Distributions for Means","mod":4,"t":"Activity","k":"activity","g":"practice","due":"2027-02-02","cl":"2027-04-12","id":"2027-02-02|Activity|4.1. Sampling Distributions for Means"},{"d":"2027-02-03","lesson":"4.2. t‑Distributions & One‑Sample t‑Intervals","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-02-03|Notes|4.2. t‑Distributions & One‑Sample t‑Intervals"},{"d":"2027-02-04","lesson":"4.2. t‑Distributions & One‑Sample t‑Intervals","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-02-04|Notes|4.2. t‑Distributions & One‑Sample t‑Intervals"},{"d":"2027-02-04","lesson":"4.2. t‑Distributions & One‑Sample t‑Intervals","mod":4,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-02-04|CYK|4.2. t‑Distributions & One‑Sample t‑Intervals"},{"d":"2027-02-05","lesson":"4.2. t‑Distributions & One‑Sample t‑Intervals","mod":4,"t":"Activity","k":"activity","g":"practice","due":"2027-02-05","cl":"2027-04-12","id":"2027-02-05|Activity|4.2. t‑Distributions & One‑Sample t‑Intervals"},{"d":"2027-02-08","lesson":"4.3. Interpreting and Justifying Claims from t‑Based CIs","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-02-08|Notes|4.3. Interpreting and Justifying Claims from t‑Based CIs"},{"d":"2027-02-08","lesson":"4.3. Interpreting and Justifying Claims from t‑Based CIs","mod":4,"t":"Module 3 Take-two Activity Due","k":"taketwo","g":"practice","due":"2027-02-08","cl":"2027-02-08","id":"2027-02-08|Module 3 Take-two Activity Due|4.3. Interpreting and Justifying Claims from t‑Based CIs"},{"d":"2027-02-09","lesson":"4.3. Interpreting and Justifying Claims from t‑Based CIs","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-02-09|Notes|4.3. Interpreting and Justifying Claims from t‑Based CIs"},{"d":"2027-02-09","lesson":"4.3. Interpreting and Justifying Claims from t‑Based CIs","mod":4,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-02-09|CYK|4.3. Interpreting and Justifying Claims from t‑Based CIs"},{"d":"2027-02-10","lesson":"4.3. Interpreting and Justifying Claims from t‑Based CIs","mod":4,"t":"Activity","k":"activity","g":"practice","due":"2027-02-11","cl":"2027-04-12","d2":"2027-02-11","id":"2027-02-10|Activity|4.3. Interpreting and Justifying Claims from t‑Based CIs"},{"d":"2027-02-12","lesson":"4.4. Completing a One‑Sample t‑Tests","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-02-12|Notes|4.4. Completing a One‑Sample t‑Tests"},{"d":"2027-02-15","lesson":"4.4. Completing a One‑Sample t‑Tests","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-02-15|Notes|4.4. Completing a One‑Sample t‑Tests"},{"d":"2027-02-15","lesson":"4.4. Completing a One‑Sample t‑Tests","mod":4,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-02-15|CYK|4.4. Completing a One‑Sample t‑Tests"},{"d":"2027-02-16","lesson":"4.4. Completing a One‑Sample t‑Tests","mod":4,"t":"Activity","k":"activity","g":"practice","due":"2027-02-17","cl":"2027-04-12","d2":"2027-02-17","id":"2027-02-16|Activity|4.4. Completing a One‑Sample t‑Tests"},{"d":"2027-02-18","lesson":"Module 4","mod":4,"t":"Mid-Module Check-in","k":"checkin","g":"assess","due":"2027-02-18","cl":"2027-04-12","id":"2027-02-18|Mid-Module Check-in|Module 4"},{"d":"2027-02-19","lesson":"4.5. Completing a Matched Pairs t‑Tests and CI","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-02-19|Notes|4.5. Completing a Matched Pairs t‑Tests and CI"},{"d":"2027-02-22","lesson":"4.5. Completing a Matched Pairs t‑Tests and CI","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-02-22|Notes|4.5. Completing a Matched Pairs t‑Tests and CI"},{"d":"2027-02-22","lesson":"4.5. Completing a Matched Pairs t‑Tests and CI","mod":4,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-02-22|CYK|4.5. Completing a Matched Pairs t‑Tests and CI"},{"d":"2027-02-23","lesson":"4.5. Completing a Matched Pairs t‑Tests and CI","mod":4,"t":"Activity","k":"activity","g":"practice","due":"2027-02-24","cl":"2027-04-22","d2":"2027-02-24","id":"2027-02-23|Activity|4.5. Completing a Matched Pairs t‑Tests and CI"},{"d":"2027-02-25","lesson":"4.6. Sampling Distributions for Difference of Means","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-02-25|Notes|4.6. Sampling Distributions for Difference of Means"},{"d":"2027-02-26","lesson":"4.6. Sampling Distributions for Difference of Means","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-02-26|Notes|4.6. Sampling Distributions for Difference of Means"},{"d":"2027-02-26","lesson":"4.6. Sampling Distributions for Difference of Means","mod":4,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-02-26|CYK|4.6. Sampling Distributions for Difference of Means"},{"d":"2027-03-01","lesson":"4.6. Sampling Distributions for Difference of Means","mod":4,"t":"Activity","k":"activity","g":"practice","due":"2027-03-02","cl":"2027-04-22","d2":"2027-03-02","id":"2027-03-01|Activity|4.6. Sampling Distributions for Difference of Means"},{"d":"2027-03-03","lesson":"4.7. Two-Sample t-Intervals for the Difference Between Population Means and Using Them to Justify Claims","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-03-03|Notes|4.7. Two-Sample t-Intervals for the Difference Between Population Means and Using Them to Justify Claims"},{"d":"2027-03-04","lesson":"4.7. Two-Sample t-Intervals for the Difference Between Population Means and Using Them to Justify Claims","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-03-04|Notes|4.7. Two-Sample t-Intervals for the Difference Between Population Means and Using Them to Justify Claims"},{"d":"2027-03-04","lesson":"4.7. Two-Sample t-Intervals for the Difference Between Population Means and Using Them to Justify Claims","mod":4,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-03-04|CYK|4.7. Two-Sample t-Intervals for the Difference Between Population Means and Using Them to Justify Claims"},{"d":"2027-03-05","lesson":"4.7. Two-Sample t-Intervals for the Difference Between Population Means and Using Them to Justify Claims","mod":4,"t":"Activity","k":"activity","g":"practice","due":"2027-03-08","cl":"2027-04-22","d2":"2027-03-08","id":"2027-03-05|Activity|4.7. Two-Sample t-Intervals for the Difference Between Population Means and Using Them to Justify Claims"},{"d":"2027-03-09","lesson":"4.8. Completing a Two‑Sample t‑Tests","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-03-09|Notes|4.8. Completing a Two‑Sample t‑Tests"},{"d":"2027-03-10","lesson":"4.8. Completing a Two‑Sample t‑Tests","mod":4,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-03-10|Notes|4.8. Completing a Two‑Sample t‑Tests"},{"d":"2027-03-10","lesson":"4.8. Completing a Two‑Sample t‑Tests","mod":4,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-03-10|CYK|4.8. Completing a Two‑Sample t‑Tests"},{"d":"2027-03-11","lesson":"4.8. Completing a Two‑Sample t‑Tests","mod":4,"t":"Activity","k":"activity","g":"practice","due":"2027-03-12","cl":"2027-04-22","d2":"2027-03-12","id":"2027-03-11|Activity|4.8. Completing a Two‑Sample t‑Tests"},{"d":"2027-03-15","lesson":"Module 4","mod":4,"t":"Review Discussion Board","k":"discussion","g":"practice","due":"2027-03-15","cl":"2027-04-22","id":"2027-03-15|Review Discussion Board|Module 4"},{"d":"2027-03-16","lesson":"Module 4","mod":4,"t":"Unit 4 Progress Check","k":"progress","g":"assess","due":"2027-03-16","cl":"2027-04-22","id":"2027-03-16|Unit 4 Progress Check|Module 4"},{"d":"2027-03-17","lesson":"Module 4","mod":4,"t":"Assignment","k":"assignment","g":"practice","due":"2027-03-17","cl":"2027-04-22","id":"2027-03-17|Assignment|Module 4"},{"d":"2027-03-18","lesson":"Module 4","mod":4,"t":"Module 4 Assessment MCQ","k":"assessment","g":"assess","due":"2027-03-18","cl":"2027-04-22","id":"2027-03-18|Module 4 Assessment MCQ|Module 4"},{"d":"2027-03-19","lesson":"Module 4","mod":4,"t":"Module 4 Assessment FRQ","k":"assessment","g":"assess","due":"2027-03-19","cl":"2027-04-22","id":"2027-03-19|Module 4 Assessment FRQ|Module 4"},{"d":"2027-03-22","lesson":"5.1. Scatterplots & Graphical Representations","mod":5,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-03-22|Notes|5.1. Scatterplots & Graphical Representations"},{"d":"2027-03-23","lesson":"5.1. Scatterplots & Graphical Representations","mod":5,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-03-23|Notes|5.1. Scatterplots & Graphical Representations"},{"d":"2027-03-23","lesson":"5.1. Scatterplots & Graphical Representations","mod":5,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-03-23|CYK|5.1. Scatterplots & Graphical Representations"},{"d":"2027-03-24","lesson":"5.1. Scatterplots & Graphical Representations","mod":5,"t":"Activity","k":"activity","g":"practice","due":"2027-03-25","cl":"2027-05-04","d2":"2027-03-25","id":"2027-03-24|Activity|5.1. Scatterplots & Graphical Representations"},{"d":"2027-03-30","lesson":"5.2. Correlation","mod":5,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-03-30|Notes|5.2. Correlation"},{"d":"2027-03-30","lesson":"5.2. Correlation","mod":5,"t":"Module 4 Take-two Activity Due","k":"taketwo","g":"practice","due":"2027-03-30","cl":"2027-03-30","id":"2027-03-30|Module 4 Take-two Activity Due|5.2. Correlation"},{"d":"2027-03-31","lesson":"5.2. Correlation","mod":5,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-03-31|Notes|5.2. Correlation"},{"d":"2027-03-31","lesson":"5.2. Correlation","mod":5,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-03-31|CYK|5.2. Correlation"},{"d":"2027-04-01","lesson":"5.2. Correlation","mod":5,"t":"Activity","k":"activity","g":"practice","due":"2027-04-02","cl":"2027-05-04","d2":"2027-04-02","id":"2027-04-01|Activity|5.2. Correlation"},{"d":"2027-04-05","lesson":"5.3. Linear Regression Models","mod":5,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-04-05|Notes|5.3. Linear Regression Models"},{"d":"2027-04-06","lesson":"5.3. Linear Regression Models","mod":5,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-04-06|Notes|5.3. Linear Regression Models"},{"d":"2027-04-06","lesson":"5.3. Linear Regression Models","mod":5,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-04-06|CYK|5.3. Linear Regression Models"},{"d":"2027-04-07","lesson":"5.3. Linear Regression Models","mod":5,"t":"Activity","k":"activity","g":"practice","due":"2027-04-08","cl":"2027-05-04","d2":"2027-04-08","id":"2027-04-07|Activity|5.3. Linear Regression Models"},{"d":"2027-04-12","lesson":"Module 5","mod":5,"t":"Mid-Module Check-in","k":"checkin","g":"assess","due":"2027-04-12","cl":"2027-05-04","id":"2027-04-12|Mid-Module Check-in|Module 5"},{"d":"2027-04-13","lesson":"5.4. Residuals & Diagnostic Plots","mod":5,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-04-13|Notes|5.4. Residuals & Diagnostic Plots"},{"d":"2027-04-14","lesson":"5.4. Residuals & Diagnostic Plots","mod":5,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-04-14|Notes|5.4. Residuals & Diagnostic Plots"},{"d":"2027-04-14","lesson":"5.4. Residuals & Diagnostic Plots","mod":5,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-04-14|CYK|5.4. Residuals & Diagnostic Plots"},{"d":"2027-04-15","lesson":"5.4. Residuals & Diagnostic Plots","mod":5,"t":"Activity","k":"activity","g":"practice","due":"2027-04-15","cl":"2027-05-05","id":"2027-04-15|Activity|5.4. Residuals & Diagnostic Plots"},{"d":"2027-04-16","lesson":"5.5. Least‑Squares Regression, R","mod":5,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-04-16|Notes|5.5. Least‑Squares Regression, R"},{"d":"2027-04-19","lesson":"5.5. Least‑Squares Regression, R","mod":5,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-04-19|Notes|5.5. Least‑Squares Regression, R"},{"d":"2027-04-19","lesson":"5.5. Least‑Squares Regression, R","mod":5,"t":"CYK","k":"cyk","g":"learn","due":null,"cl":null,"id":"2027-04-19|CYK|5.5. Least‑Squares Regression, R"},{"d":"2027-04-20","lesson":"5.5. Least‑Squares Regression, R","mod":5,"t":"Activity","k":"activity","g":"practice","due":"2027-04-21","cl":"2027-05-05","d2":"2027-04-21","id":"2027-04-20|Activity|5.5. Least‑Squares Regression, R"},{"d":"2027-04-22","lesson":"Module 5","mod":5,"t":"Review Discussion Board","k":"discussion","g":"practice","due":"2027-04-22","cl":"2027-05-05","id":"2027-04-22|Review Discussion Board|Module 5"},{"d":"2027-04-23","lesson":"Module 5","mod":5,"t":"Unit 5 Progress Check","k":"progress","g":"assess","due":"2027-04-23","cl":"2027-05-05","id":"2027-04-23|Unit 5 Progress Check|Module 5"},{"d":"2027-04-26","lesson":"Module 5","mod":5,"t":"Assignment","k":"assignment","g":"practice","due":"2027-04-26","cl":"2027-05-05","id":"2027-04-26|Assignment|Module 5"},{"d":"2027-04-27","lesson":"Module 5","mod":5,"t":"Assessment MCQ","k":"assessment","g":"assess","due":"2027-04-27","cl":"2027-05-05","id":"2027-04-27|Assessment MCQ|Module 5"},{"d":"2027-04-28","lesson":"Module 5","mod":5,"t":"Assessment FRQ","k":"assessment","g":"assess","due":"2027-04-28","cl":"2027-05-05","id":"2027-04-28|Assessment FRQ|Module 5"},{"d":"2027-04-29","lesson":"6.1. Exploring One‑Variable Data and Collecting Data Review","mod":6,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-04-29|Notes|6.1. Exploring One‑Variable Data and Collecting Data Review"},{"d":"2027-04-29","lesson":"6.1. Exploring One‑Variable Data and Collecting Data Review","mod":6,"t":"Activity","k":"activity","g":"practice","due":"2027-04-29","cl":"2027-05-07","id":"2027-04-29|Activity|6.1. Exploring One‑Variable Data and Collecting Data Review"},{"d":"2027-04-30","lesson":"6.1. Exploring One‑Variable Data and Collecting Data Review","mod":6,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-04-30|Notes|6.1. Exploring One‑Variable Data and Collecting Data Review"},{"d":"2027-04-30","lesson":"6.1. Exploring One‑Variable Data and Collecting Data Review","mod":6,"t":"Activity","k":"activity","g":"practice","due":"2027-04-30","cl":"2027-05-07","id":"2027-04-30|Activity|6.1. Exploring One‑Variable Data and Collecting Data Review"},{"d":"2027-05-03","lesson":"6.2. Probability and Random Variables Review","mod":6,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-05-03|Notes|6.2. Probability and Random Variables Review"},{"d":"2027-05-03","lesson":"6.2. Probability and Random Variables Review","mod":6,"t":"Activity","k":"activity","g":"practice","due":"2027-05-03","cl":"2027-05-07","id":"2027-05-03|Activity|6.2. Probability and Random Variables Review"},{"d":"2027-05-04","lesson":"6.3. Inference for Proportions and Categorical Data","mod":6,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-05-04|Notes|6.3. Inference for Proportions and Categorical Data"},{"d":"2027-05-04","lesson":"6.3. Inference for Proportions and Categorical Data","mod":6,"t":"Activity","k":"activity","g":"practice","due":"2027-05-04","cl":"2027-05-07","id":"2027-05-04|Activity|6.3. Inference for Proportions and Categorical Data"},{"d":"2027-05-05","lesson":"6.4. Inference for Means: t‑Procedures, Matched‑Pairs, and Two‑Sample Comparison","mod":6,"t":"Notes","k":"notes","g":"learn","due":null,"cl":null,"id":"2027-05-05|Notes|6.4. Inference for Means: t‑Procedures, Matched‑Pairs, and Two‑Sample Comparison"},{"d":"2027-05-05","lesson":"6.4. Inference for Means: t‑Procedures, Matched‑Pairs, and Two‑Sample Comparison","mod":6,"t":"Activity","k":"activity","g":"practice","due":"2027-05-05","cl":"2027-05-07","id":"2027-05-05|Activity|6.4. Inference for Means: t‑Procedures, Matched‑Pairs, and Two‑Sample Comparison"},{"d":"2027-05-06","lesson":"Module 6","mod":6,"t":"AP Statistics Practice Exam","k":"assessment","g":"assess","due":"2027-05-06","cl":"2027-05-10","id":"2027-05-06|AP Statistics Practice Exam|Module 6"},{"d":"2027-05-06","lesson":"Module 6","mod":6,"t":"Module 5 Take-two Activity Due","k":"taketwo","g":"practice","due":"2027-05-06","cl":"2027-05-06","id":"2027-05-06|Module 5 Take-two Activity Due|Module 6"},{"d":"2027-05-07","lesson":"Module 6","mod":6,"t":"Final Project","k":"project","g":"assess","due":"2027-05-07","cl":"2027-05-11","id":"2027-05-07|Final Project|Module 6"},{"d":"2027-05-10","lesson":"Module 6","mod":6,"t":"Final Project","k":"project","g":"assess","due":null,"cl":null,"id":"2027-05-10|Final Project|Module 6"}],"admin":[{"d":"2027-05-11","t":"Last day of the semester","k":"milestone","g":"info","note":""}],"breaks":{"2026-09-07":"Course Break - State Holiday","2026-11-11":"Course Break - State Holiday","2026-11-26":"Course Break - State Holiday","2026-11-27":"Course Break - State Holiday","2026-12-16":"Winter Break","2026-12-17":"Winter Break","2026-12-18":"Winter Break","2026-12-21":"Winter Break","2026-12-22":"Winter Break","2026-12-23":"Winter Break","2026-12-24":"Winter Break","2026-12-25":"Winter Break","2026-12-28":"Winter Break","2026-12-29":"Winter Break","2026-12-30":"Winter Break","2026-12-31":"Winter Break","2027-01-01":"Course Break - State Holiday","2027-01-18":"Holiday","2027-03-26":"Course Break - State Holiday","2027-03-29":"Course Break"}};
+var TITLE = 'AP Statistics: Regular Start YL';
+
+/* Module names are shown in the header of each week. Edit freely. */
+var MOD = {
+  1:'Exploring One-Variable Data & Collecting Data',
+  2:'Probability, Random Variables & Sampling Distributions',
+  3:'Inference for Proportions & Categorical Data',
+  4:'Inference for Means',
+  5:'Regression & Bivariate Data',
+  6:'Review & Final Project'
+};
+
+/* ---------- date helpers (day numbers, timezone-proof) ---------- */
+var MS = 864e5;
+function dn(s){ var p=s.split('-'); return Math.round(Date.UTC(+p[0],+p[1]-1,+p[2])/MS); }
+function dd(n){ return new Date(n*MS); }
+function fmt(n,o){ o.timeZone='UTC'; return dd(n).toLocaleDateString('en-US',o); }
+function fShort(n){ return fmt(n,{month:'short',day:'numeric'}); }
+function fWd(n){ return fmt(n,{weekday:'short',month:'short',day:'numeric'}); }
+function wstart(n){ return n - ((dd(n).getUTCDay()+6)%7); }
+function todayN(){
+  var q=null; try{ q=new URLSearchParams(location.search).get('today'); }catch(e){}
+  if(q && /^\d{4}-\d\d-\d\d$/.test(q)) return dn(q);
+  var t=new Date(); return Math.round(Date.UTC(t.getFullYear(),t.getMonth(),t.getDate())/MS);
+}
+var TODAY = todayN();
+
+/* ---------- model ---------- */
+var items = DATA.items.map(function(it){
+  return Object.assign({}, it, {
+    n: dn(it.d), n2: it.d2 ? dn(it.d2) : null,
+    dueN: it.due ? dn(it.due) : null, clN: it.cl ? dn(it.cl) : null,
+    m: it.mod===0 ? 1 : it.mod
+  });
+});
+var admin = DATA.admin.map(function(a){ return Object.assign({}, a, {n: dn(a.d)}); });
+var breaks = {}; Object.keys(DATA.breaks).forEach(function(k){ breaks[dn(k)] = DATA.breaks[k]; });
+
+var idx = {};
+function slot(n){ return idx[n] || (idx[n] = {sched:[], due:[], cl:[], admin:[]}); }
+items.forEach(function(it){
+  slot(it.n).sched.push(it);
+  if(it.n2!=null) slot(it.n2).sched.push(it);
+  if(it.dueN!=null) slot(it.dueN).due.push(it);
+  if(it.clN!=null)  slot(it.clN).cl.push(it);
+});
+admin.forEach(function(a){ slot(a.n).admin.push(a); });
+var EMPTY = {sched:[], due:[], cl:[], admin:[]};
+function S(n){ return idx[n] || EMPTY; }
+
+var allN = items.map(function(i){return i.n;}).concat(admin.map(function(a){return a.n;}));
+var startN = Math.min.apply(null, allN), endN = Math.max.apply(null, allN);
+var ws0 = wstart(startN), NW = (wstart(endN)-ws0)/7 + 1;
+
+/* module for each week = module most scheduled that week (carry forward on break weeks) */
+var weekMod = [];
+(function(){
+  var prev = 1;
+  for(var w=0; w<NW; w++){
+    var c={}, best=0, bn=0;
+    for(var i=0;i<7;i++){ S(ws0+7*w+i).sched.forEach(function(it){ c[it.m]=(c[it.m]||0)+1; }); }
+    Object.keys(c).forEach(function(k){ if(c[k]>bn || (c[k]===bn && +k>best)){ bn=c[k]; best=+k; } });
+    prev = best || prev; weekMod.push(prev);
+  }
+})();
+function weekBreakDays(ws){ var k=0; for(var i=0;i<5;i++) if(breaks[ws+i]) k++; return k; }
+function weekDue(ws){
+  var out=[]; for(var i=0;i<7;i++) S(ws+i).due.forEach(function(it){ out.push(it); });
+  return out;
+}
+
+/* ---------- state ---------- */
+var KEY='apstats-26-27-regular-checked-v1', store=null, done={};
+try{ store=window.localStorage; store.getItem(KEY); }catch(e){ store=null; }
+try{ if(store){ JSON.parse(store.getItem(KEY)||'[]').forEach(function(k){ done[k]=1; }); } }catch(e){}
+function saveDone(){ try{ if(store) store.setItem(KEY, JSON.stringify(Object.keys(done))); }catch(e){} }
+
+function clampN(n){ return Math.max(startN, Math.min(endN, n)); }
+var curWs = wstart(clampN(TODAY));
+var state = {
+  view:'month',
+  month: (function(){ var d=dd(clampN(TODAY)); return {y:d.getUTCFullYear(), m:d.getUTCMonth()}; })(),
+  sel: {mode:'week', ws: curWs},
+  focus: (TODAY>=startN && TODAY<=endN) ? TODAY : null,
+  q:'', f:{learn:true, practice:true, assess:true}
+};
+var minM = (function(){ var d=dd(startN); return d.getUTCFullYear()*12+d.getUTCMonth(); })();
+var maxM = (function(){ var d=dd(endN);   return d.getUTCFullYear()*12+d.getUTCMonth(); })();
+
+/* ---------- small utils ---------- */
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function $(s,el){ return (el||document).querySelector(s); }
+function $$(s,el){ return Array.prototype.slice.call((el||document).querySelectorAll(s)); }
+function vis(it){ return state.f[it.g] !== false; }
+function matchQ(it){
+  var q=state.q.trim().toLowerCase(); if(!q) return true;
+  var hay=(it.lesson+' '+it.t+' Module '+it.m).toLowerCase();
+  return q.split(/\s+/).every(function(w){ return hay.indexOf(w)>-1; });
+}
+function lno(it){
+  var m=/^(\d\.\d)/.exec(it.lesson); if(m) return m[1];
+  m=/^Module (\d)/.exec(it.lesson); if(m) return 'M'+m[1];
+  return it.lesson.indexOf('Getting')===0 ? 'Start' : '';
+}
+function shortT(it){
+  var t=it.t;
+  if(it.k==='taketwo') return 'Take-two';
+  if(/CYK$/.test(t)) return 'CYK';
+  if(it.k==='checkin') return 'Check-in';
+  if(it.k==='discussion') return 'Discussion';
+  if(it.k==='progress') return 'Progress check';
+  if(/MCQ/.test(t)) return 'MCQ';
+  if(/FRQ/.test(t)) return 'FRQ';
+  if(/Post Assessment/.test(t)) return 'MC post-test';
+  if(/Practice Exam/.test(t)) return 'Practice exam';
+  if(it.k==='project') return 'Final project';
+  if(/^MC and FR/.test(t)) return 'MC + FR';
+  if(it.lesson==='Getting Started' && t==='Getting Started') return 'Notes';
+  return t;
+}
+function shortBrk(b){ return b.replace(/^Course Break - /,'').replace(/^Course Break$/,'Course break'); }
+function plural(n,w){ return n+' '+w+(n===1?'':'s'); }
+
+function status(it){
+  if(done[it.id]) return {c:'done', t:'Checked off'};
+  if(it.dueN==null) return null;
+  var d=it.dueN-TODAY;
+  if(d>0) return d>14 ? {c:'upcoming', t:'Upcoming'} : {c:d<=2?'soon':'upcoming', t:d===1?'Due tomorrow':'Due in '+d+' days'};
+  if(d===0) return {c:'today', t:'Due today'};
+  if(it.clN!=null && TODAY<=it.clN){
+    var left=it.clN-TODAY;
+    return {c:'late', t: left===0 ? 'Late work closes today' : 'Past due · closes in '+plural(left,'day')};
+  }
+  return {c:'closed', t: it.clN!=null ? 'Closed' : 'Past due'};
+}
+
+/* ---------- row (one assignment) ---------- */
+function rowHTML(it, o){
+  o=o||{};
+  var st=status(it), dts='';
+  var asg = it.n2!=null ? fShort(it.n)+' – '+fShort(it.n2) : fShort(it.n);
+  dts += '<span><em>Assigned</em> '+asg+'</span>';
+  if(it.dueN!=null) dts += '<span><em>Due</em> '+fWd(it.dueN)+'</span>';
+  if(it.clN!=null && it.clN!==it.dueN) dts += '<span class="c"><em>Closes</em> '+fWd(it.clN)+'</span>';
+  var part='';
+  if(it.n2!=null && o.day!=null) part=' <small>(day '+(o.day===it.n?'1':'2')+' of 2)</small>';
+  var title=esc(it.t.replace(/\s+/g,' '));
+  return '<div class="row g-'+it.g+(done[it.id]?' is-done':'')+'">'+
+    '<input type="checkbox" data-id="'+esc(it.id)+'"'+(done[it.id]?' checked':'')+' aria-label="Mark '+title+' as done">'+
+    '<span><span class="ttl">'+title+part+'</span>'+
+    (o.lesson ? '<span class="les">'+esc(it.lesson)+'</span>' : '')+
+    '<span class="dts">'+dts+'</span></span>'+
+    (st ? '<span class="st st-'+st.c+'">'+st.t+'</span>' : '')+
+  '</div>';
+}
+function adminRow(a){
+  return '<div class="row noc g-info"><span><span class="ttl">'+esc(a.t)+'</span></span></div>';
+}
+
+/* ---------- one day (used in the panel and the list view) ---------- */
+function dayHTML(n, o){
+  o=o||{};
+  var s=S(n), sched=s.sched.filter(vis), closes=s.cl.filter(vis), brk=breaks[n];
+  var weekend = ((dd(n).getUTCDay()+6)%7) >= 5;
+  if(weekend && !sched.length && !closes.length && !s.admin.length && !brk) return '';
+  var h='<section class="dayb'+(n===TODAY?' is-today':'')+(n===o.focus?' is-focus':'')+'" data-pd="'+n+'">'+
+    '<div class="dh"><span>'+fWd(n)+'</span>'+(n===TODAY?'<span class="t">Today</span>':'')+(brk?'<span class="b">'+esc(shortBrk(brk))+'</span>':'')+'</div>';
+  if(closes.length){
+    h+='<details class="closing" data-k="c'+n+(o.pre||'')+'"><summary>Late work closes today for '+plural(closes.length,'item')+'</summary>'+
+       closes.map(function(it){ return rowHTML(it,{lesson:true}); }).join('')+'</details>';
+  }
+  var last=null;
+  sched.forEach(function(it){
+    if(it.lesson!==last){ h+='<p class="lt">'+esc(it.lesson)+'</p>'; last=it.lesson; }
+    h+=rowHTML(it,{day:n});
+  });
+  s.admin.forEach(function(a){ h+=adminRow(a); });
+  if(!sched.length && !closes.length && !s.admin.length) h+='<p class="none">'+(brk?'No class work.':'Nothing scheduled.')+'</p>';
+  return h+'</section>';
+}
+
+/* ---------- panel: week / list / search ---------- */
+function weekHTML(ws, focus){
+  var wi=(ws-ws0)/7, wk=wi+1, mod=weekMod[wi];
+  var h='<div class="ph"><button class="ib" data-act="wk-prev" aria-label="Previous week"'+(wi<=0?' disabled':'')+'>‹</button>'+
+    '<div class="pt"><h2>Week '+wk+'</h2><p>'+fShort(ws)+' – '+fShort(ws+6)+' · Module '+mod+': '+esc(MOD[mod])+'</p></div>'+
+    '<button class="ib" data-act="wk-next" aria-label="Next week"'+(wi>=NW-1?' disabled':'')+'>›</button></div>';
+  if(ws!==curWs) h+='<button class="link" data-act="wk-now">Jump to this week</button>';
+  for(var i=0;i<7;i++) h+=dayHTML(ws+i,{focus:focus});
+  return h;
+}
+function listHTML(key){
+  var h='', list, back='<button class="link" data-act="wk-now">Back to this week</button>';
+  if(key==='due7'){
+    list=items.filter(function(it){ return it.dueN!=null && it.dueN>=TODAY && it.dueN<=TODAY+6 && !done[it.id] && vis(it); })
+      .sort(function(a,b){ return a.dueN-b.dueN || a.n-b.n; });
+    h+='<div class="ph"><div class="pt"><h2>Due in the next 7 days</h2><p>'+plural(list.length,'item')+' not yet checked off</p></div></div>'+back;
+    if(!list.length) return h+'<p class="empty">Nothing left to do in the next 7 days.</p>';
+    var cur=null;
+    list.forEach(function(it){
+      if(it.dueN!==cur){ cur=it.dueN; h+='<p class="lt" style="margin-top:12px">'+fWd(cur)+(cur===TODAY?' (today)':cur===TODAY+1?' (tomorrow)':'')+'</p>'; }
+      h+=rowHTML(it,{lesson:true});
+    });
+    return h;
+  }
+  list=items.filter(function(it){ return it.dueN!=null && it.dueN<TODAY && it.clN!=null && it.clN>=TODAY && !done[it.id] && vis(it); })
+    .sort(function(a,b){ return a.clN-b.clN || a.dueN-b.dueN; });
+  h+='<div class="ph"><div class="pt"><h2>Past due, still open</h2><p>'+plural(list.length,'item')+' you can still turn in, soonest closing first</p></div></div>'+back;
+  h+='<p class="note">Check the box on work you’ve finished and it drops off this list.</p>';
+  if(!list.length) return h+'<p class="empty">Nothing past due is still open. Nice work.</p>';
+  var c2=null;
+  list.forEach(function(it){
+    if(it.clN!==c2){ c2=it.clN; var k=list.filter(function(x){return x.clN===c2;}).length;
+      h+='<p class="lt" style="margin-top:12px">Closes '+fWd(c2)+' · '+plural(k,'item')+'</p>'; }
+    h+=rowHTML(it,{lesson:true});
+  });
+  return h;
+}
+function searchHTML(){
+  var res=items.filter(function(it){ return vis(it) && matchQ(it); }).sort(function(a,b){ return a.n-b.n; });
+  var h='<div class="ph"><div class="pt"><h2>'+plural(res.length,'result')+'</h2><p>for “'+esc(state.q.trim())+'”</p></div></div>';
+  if(!res.length) return h+'<p class="empty">No matches. Try a lesson number like 2.5, or a word like “binomial”.</p>';
+  res.slice(0,80).forEach(function(it){ h+=rowHTML(it,{lesson:true}); });
+  if(res.length>80) h+='<p class="note">Showing the first 80. Add more words to narrow it down.</p>';
+  return h;
+}
+function renderPanel(keepScroll){
+  var p=$('#panel'), top=p.scrollTop;
+  var open=$$('details[open]',p).map(function(d){ return d.getAttribute('data-k'); });
+  p.innerHTML = state.q.trim() ? searchHTML() : (state.sel.mode==='list' ? listHTML(state.sel.key) : weekHTML(state.sel.ws, state.focus));
+  $$('details',p).forEach(function(d){ if(open.indexOf(d.getAttribute('data-k'))>-1) d.open=true; });
+  if(keepScroll) p.scrollTop=top; else p.scrollTop=0;
+}
+
+/* ---------- month grid ---------- */
+function pillsFor(n){
+  var s=S(n), out=[], seen={};
+  s.sched.filter(vis).forEach(function(it){
+    var dim=!matchQ(it);
+    if(it.k==='notes' || it.k==='cyk'){
+      var p=seen[it.lesson];
+      if(!p){ p=seen[it.lesson]={g:'learn',lno:lno(it),parts:[],dim:dim,allDone:true}; out.push(p); }
+      p.parts.push(shortT(it)); if(!done[it.id]) p.allDone=false; if(!dim) p.dim=false;
+    } else {
+      var part = it.n2!=null ? ' pt '+(n===it.n?'1':'2') : '';
+      out.push({g:it.g,lno:lno(it),parts:[shortT(it)+part],tag:it.dueN===n,dim:dim,allDone:!!done[it.id]});
+    }
+  });
+  var h=out.map(function(p){
+    var lab=(p.lno?p.lno+' ':'')+p.parts.join(' + ');
+    return '<span class="pill g-'+p.g+(p.allDone?' is-done':'')+(p.dim?' dim':'')+'" title="'+esc(lab)+'"><span class="pl">'+esc(lab)+'</span>'+(p.tag?'<span class="pt">due</span>':'')+'</span>';
+  });
+  s.admin.forEach(function(a){
+    h.push('<span class="pill g-info" title="'+esc(a.t)+'"><span class="pl">'+esc(a.t.replace(' due',''))+'</span></span>');
+  });
+  var nc=s.cl.filter(vis).length;
+  if(nc) h.push('<span class="pill g-closes" title="'+plural(nc,'item')+' close for late work"><span class="pl">closes · '+nc+'</span></span>');
+  return h.join('');
+}
+function renderMonth(){
+  var y=state.month.y, m=state.month.m;
+  var first=Math.round(Date.UTC(y,m,1)/MS), last=Math.round(Date.UTC(y,m+1,0)/MS);
+  var gs=wstart(first), ge=wstart(last)+6;
+  var h='<div class="grid" role="group" aria-label="'+fmt(first,{month:'long',year:'numeric'})+'"><div class="gh">Wk</div>'+
+    ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(function(d){ return '<div class="gh">'+d+'</div>'; }).join('');
+  for(var w=gs; w<=ge; w+=7){
+    var wi=(w-ws0)/7, inCourse=wi>=0 && wi<NW, selW = state.sel.mode==='week' && state.sel.ws===w;
+    h+='<div class="wkl">'+(inCourse?'<button class="wkb'+(selW?' sel':'')+'" data-ws="'+w+'" aria-label="Week '+(wi+1)+', '+fShort(w)+' to '+fShort(w+6)+'">'+(wi+1)+'</button>':'')+'</div>';
+    for(var i=0;i<7;i++){
+      var n=w+i, inM=dd(n).getUTCMonth()===m, brk=breaks[n], s=S(n);
+      var inC = n>=startN && n<=endN+4;
+      var due=s.due.filter(vis).length, cl=s.cl.filter(vis).length, ct=s.sched.filter(vis).length;
+      var lab=fWd(n)+(brk?', '+brk:'')+': '+plural(ct,'item')+(due?', '+due+' due':'')+(cl?', '+cl+' close':'');
+      h+='<button class="day'+(inM?'':' out')+(brk?' brk':'')+(n===TODAY?' today':'')+(n===state.focus?' focus':'')+(selW?' insel':'')+(inC?'':' nocourse')+'" data-n="'+n+'" aria-label="'+esc(lab)+'">'+
+        '<span class="num">'+dd(n).getUTCDate()+'</span>'+
+        (brk?'<span class="bl">'+esc(shortBrk(brk))+'</span>':'')+
+        '<span class="pills">'+pillsFor(n)+'</span></button>';
+    }
+  }
+  $('#cal').innerHTML = h+'</div>';
+}
+
+/* ---------- list view ---------- */
+function renderAgenda(){
+  var q=state.q.trim(), h='', shown=0;
+  for(var w=0; w<NW; w++){
+    var ws=ws0+7*w, hits=0, body='';
+    for(var i=0;i<7;i++){
+      var n=ws+i;
+      if(q){ hits+=S(n).sched.filter(function(it){return vis(it)&&matchQ(it);}).length; }
+    }
+    if(q && !hits) continue;
+    for(var j=0;j<7;j++) body+=dayHTML(ws+j,{pre:'a'});
+    var dues=weekDue(ws).filter(vis).length;
+    var isOpen = q ? true : (ws===(state.sel.mode==='week'?state.sel.ws:curWs));
+    h+='<details class="awk" data-ws="'+ws+'" data-k="w'+ws+'"'+(isOpen?' open':'')+'><summary><span>Week '+(w+1)+'</span><span class="m">'+fShort(ws)+' – '+fShort(ws+6)+' · Module '+weekMod[w]+'</span>'+
+      (ws===curWs && TODAY>=startN && TODAY<=endN+6?'<span class="t">This week</span>':'')+'<span class="n">'+(dues?plural(dues,'item')+' due':'')+'</span></summary><div class="awb">'+body+'</div></details>';
+    shown++;
+  }
+  $('#cal').innerHTML = shown ? h : '<p class="empty">No matches. Try a lesson number like 2.5, or a word like “binomial”.</p>';
+}
+
+/* ---------- year chart ---------- */
+function renderChart(){
+  var maxd=3, cols='', ticks='', prevM=-1, wkDue=[];
+  for(var w=0; w<NW; w++){ var d=weekDue(ws0+7*w); wkDue.push(d); if(d.length>maxd) maxd=d.length; }
+  for(var k=0;k<NW;k++){
+    var ws=ws0+7*k, list=wkDue[k].slice().sort(function(a,b){ var r={assess:0,practice:1,learn:2}; return r[a.g]-r[b.g]; });
+    var dots=list.map(function(it){ return '<i class="dot '+(it.g==='assess'?'a':it.g==='learn'?'l':'')+'"></i>'; }).join('');
+    var cls='col'+(weekBreakDays(ws)>=3?' brk':'')+(state.sel.mode==='week'&&state.sel.ws===ws?' sel':'')+(ws===curWs&&TODAY>=startN&&TODAY<=endN+6?' cur':'');
+    cols+='<button class="'+cls+'" data-ws="'+ws+'" title="Week '+(k+1)+' · '+fShort(ws)+' – '+fShort(ws+6)+' · '+plural(list.length,'item')+' due" aria-label="Week '+(k+1)+', '+fShort(ws)+' to '+fShort(ws+6)+', '+plural(list.length,'item')+' due"><span class="dots">'+dots+'</span></button>';
+    var mm=dd(ws+3).getUTCMonth();
+    ticks+='<span class="tk">'+(mm!==prevM?fmt(ws+3,{month:'short'}):'')+'</span>'; prevM=mm;
+  }
+  var mods='', a=0;
+  while(a<NW){
+    var b=a; while(b+1<NW && weekMod[b+1]===weekMod[a]) b++;
+    var isCur=curWs>=ws0+7*a && curWs<=ws0+7*b && TODAY>=startN && TODAY<=endN+6;
+    mods+='<button class="mband'+(isCur?' cur':'')+'" style="grid-column:'+(a+1)+' / '+(b+2)+'" data-mod="'+weekMod[a]+'" title="Module '+weekMod[a]+': '+esc(MOD[weekMod[a]])+'">M'+weekMod[a]+'</button>';
+    a=b+1;
+  }
+  var c=$('#chart');
+  c.style.setProperty('--nw',NW); c.style.setProperty('--maxd',Math.min(maxd,9));
+  c.innerHTML='<div class="strip" role="group" aria-label="Weeks">'+cols+'</div><div class="ticks" aria-hidden="true">'+ticks+'</div><div class="mods" role="group" aria-label="Modules">'+mods+'</div>';
+}
+
+/* ---------- at a glance ---------- */
+function renderGlance(){
+  var inCourse=TODAY>=startN && TODAY<=endN+6;
+  var wi=(curWs-ws0)/7, mod=weekMod[wi];
+  var due7=items.filter(function(it){ return it.dueN!=null && it.dueN>=TODAY && it.dueN<=TODAY+6 && !done[it.id]; }).length;
+  var past=items.filter(function(it){ return it.dueN!=null && it.dueN<TODAY && it.clN!=null && it.clN>=TODAY && !done[it.id]; }).length;
+  var mi=items.filter(function(it){ return it.m===mod; }), md=mi.filter(function(it){ return done[it.id]; }).length;
+  var pct=mi.length?Math.round(100*md/mi.length):0;
+  var now = inCourse
+    ? '<div class="g now"><span class="k">Today</span><span class="v">'+fWd(TODAY)+'</span><span class="s">Week '+(wi+1)+' · Module '+mod+': '+esc(MOD[mod])+'</span></div>'
+    : '<div class="g now"><span class="k">Course dates</span><span class="v">'+(TODAY<startN?'Starts '+fWd(startN):'Course has ended')+'</span><span class="s">'+fShort(startN)+' – '+fShort(endN)+'</span></div>';
+  var on1=state.sel.mode==='list'&&state.sel.key==='due7', on2=state.sel.mode==='list'&&state.sel.key==='past';
+  $('#glance').innerHTML = now+
+    '<button class="g'+(on1?' on':'')+'" data-act="list-due7"><span class="k">Due in the next 7 days</span><span class="v">'+due7+'</span><span class="s">'+(due7?(due7===1?'item to finish':'items to finish')+', tap to see '+(due7===1?'it':'them'):'you’re all caught up')+'</span></button>'+
+    '<button class="g'+(on2?' on':'')+'" data-act="list-past"><span class="k">Past due, still open</span><span class="v">'+past+'</span><span class="s">'+(past?'can still be turned in, tap to see them':'nothing to catch up on')+'</span></button>'+
+    '<div class="g"><span class="k">Module '+mod+' checked off</span><span class="v">'+md+' of '+mi.length+'</span><div class="prog" role="img" aria-label="'+pct+' percent"><i style="width:'+pct+'%"></i></div></div>';
+}
+
+/* ---------- toolbar state + footer ---------- */
+function renderControls(){
+  $$('[data-f]').forEach(function(b){ b.setAttribute('aria-pressed', state.f[b.getAttribute('data-f')]?'true':'false'); });
+  $$('.seg button').forEach(function(b){ b.setAttribute('aria-pressed', (b.getAttribute('data-act')==='view-'+state.view)?'true':'false'); });
+  var cur=state.month.y*12+state.month.m;
+  $('#monthsel').value=String(cur);
+  $('[data-act="m-prev"]').disabled = cur<=minM; $('[data-act="m-next"]').disabled = cur>=maxM;
+  $('#monthnav').style.display = state.view==='month' ? '' : 'none';
+  $('#main').className = 'main'+(state.view==='agenda'?' agenda':'');
+  $('#foot').textContent = store
+    ? 'Boxes you check are saved in this browser only, so they won’t show up on another device.'
+    : 'Check marks can’t be saved in this view, so they reset when the page reloads.';
+}
+
+function render(opts){
+  opts=opts||{};
+  renderGlance(); renderChart(); renderControls();
+  if(state.view==='month'){ renderMonth(); renderPanel(opts.keepPanel); }
+  else { var open=$$('#cal details[open]').map(function(d){return d.getAttribute('data-k');}); renderAgenda();
+         if(opts.keepPanel) $$('#cal details').forEach(function(d){ d.open = open.indexOf(d.getAttribute('data-k'))>-1; }); }
+}
+
+/* ---------- actions ---------- */
+function setMonthFor(n){ var d=dd(n+3); state.month={y:d.getUTCFullYear(), m:d.getUTCMonth()}; }
+function reveal(focusN){
+  var p=$('#panel'); if(state.view!=='month') return;
+  var wide=$('#app').clientWidth>=860;
+  var el=focusN!=null ? p.querySelector('[data-pd="'+focusN+'"]') : null;
+  if(wide){ if(el && p.scrollHeight>p.clientHeight+4) p.scrollTop=Math.max(0,el.offsetTop-8); }
+  else { var rm=window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+         p.scrollIntoView({behavior:rm?'auto':'smooth', block:'start'}); }
+}
+function selectWeek(ws, focus, doReveal){
+  state.sel={mode:'week', ws:ws}; state.focus = focus==null ? null : focus; state.q=''; $('#q').value='';
+  if(state.view==='month') setMonthFor(ws);
+  render();
+  if(state.view==='agenda'){
+    var d=$('#cal details[data-ws="'+ws+'"]'); if(d){ d.open=true; d.scrollIntoView({block:'start'}); }
+  } else if(doReveal) reveal(focus);
+}
+function downloadICS(){
+  function esc2(s){ return String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n'); }
+  function ymd(n){ var d=dd(n); return d.getUTCFullYear()+('0'+(d.getUTCMonth()+1)).slice(-2)+('0'+d.getUTCDate()).slice(-2); }
+  var stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
+  var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//NCVPS AP Statistics 2026-27//EN','CALSCALE:GREGORIAN','X-WR-CALNAME:'+TITLE];
+  function ev(uid,n,sum,desc){
+    L.push('BEGIN:VEVENT','UID:'+uid+'@'+KEY,'DTSTAMP:'+stamp,'DTSTART;VALUE=DATE:'+ymd(n),'DTEND;VALUE=DATE:'+ymd(n+1),'SUMMARY:'+esc2(sum));
+    if(desc) L.push('DESCRIPTION:'+esc2(desc));
+    L.push('END:VEVENT');
+  }
+  items.forEach(function(it,i){
+    if(it.dueN==null) return;
+    var no=lno(it), title=(no?no+' ':'')+it.t.replace(/\s+/g,' ');
+    var desc=it.lesson+(it.clN!=null&&it.clN!==it.dueN?'\nLate work accepted through '+fWd(it.clN):'');
+    ev('due-'+i,it.dueN,'Due: '+title,desc);
+  });
+  admin.forEach(function(a,i){ if(a.k==='report') ev('adm-'+i,a.n,a.t,''); });
+  L.push('END:VCALENDAR');
+  var blob=new Blob([L.join('\r\n')],{type:'text/calendar'}), url=URL.createObjectURL(blob);
+  var a=document.createElement('a'); a.href=url; a.download=TITLE.replace(/[^A-Za-z0-9]+/g,'-')+'-due-dates.ics';
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },600);
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', function(e){
+  var t=e.target, el;
+  if((el=t.closest('.day[data-n]'))){
+    var n=+el.getAttribute('data-n'); var w=wstart(n);
+    if(w<ws0 || w>ws0+7*(NW-1)) return;
+    selectWeek(w, n, true);
+    var b=$('.day[data-n="'+n+'"]'); if(b) b.focus({preventScroll:true});
+    return;
+  }
+  if((el=t.closest('.wkb[data-ws], .col[data-ws]'))){ selectWeek(+el.getAttribute('data-ws'), null, true); return; }
+  if((el=t.closest('.mband[data-mod]'))){
+    var mod=+el.getAttribute('data-mod'), k=weekMod.indexOf(mod); if(k>-1) selectWeek(ws0+7*k, null, true); return;
+  }
+  if((el=t.closest('[data-f]'))){ var f=el.getAttribute('data-f'); state.f[f]=!state.f[f]; render({keepPanel:true}); return; }
+  if((el=t.closest('[data-act]'))){
+    var a=el.getAttribute('data-act');
+    if(a==='ics') downloadICS();
+    else if(a==='view-month'||a==='view-agenda'){ state.view=a==='view-month'?'month':'agenda'; if(state.sel.mode==='week') setMonthFor(state.sel.ws); render(); }
+    else if(a==='m-prev'||a==='m-next'){ var c=state.month.y*12+state.month.m+(a==='m-next'?1:-1); if(c<minM||c>maxM) return; state.month={y:Math.floor(c/12), m:c%12}; renderControls(); renderMonth(); }
+    else if(a==='today'){ state.focus=(TODAY>=startN&&TODAY<=endN)?TODAY:null; selectWeek(curWs, state.focus, true); }
+    else if(a==='wk-prev'||a==='wk-next'){ var ws=state.sel.ws+(a==='wk-next'?7:-7); if(ws<ws0||ws>ws0+7*(NW-1)) return; selectWeek(ws,null,false); }
+    else if(a==='wk-now'){ selectWeek(curWs, state.focus, false); }
+    else if(a==='list-due7'||a==='list-past'){
+      state.q=''; $('#q').value=''; state.focus=null;
+      state.sel={mode:'list', key:a==='list-due7'?'due7':'past'};
+      if(state.view==='agenda') state.view='month';
+      render(); reveal(null);
+    }
+  }
+});
+document.addEventListener('change', function(e){
+  var t=e.target;
+  if(t.matches && t.matches('input[data-id]')){
+    var id=t.getAttribute('data-id'); if(t.checked) done[id]=1; else delete done[id];
+    saveDone(); render({keepPanel:true});
+  } else if(t.id==='monthsel'){
+    var c=+t.value; state.month={y:Math.floor(c/12), m:c%12}; renderControls(); renderMonth();
+  }
+});
+$('#q').addEventListener('input', function(e){
+  state.q=e.target.value;
+  if(state.view==='month'){ renderMonth(); renderPanel(false); } else renderAgenda();
+});
+
+/* ---------- boot ---------- */
+(function(){
+  var o='';
+  for(var c=minM;c<=maxM;c++){
+    var d=new Date(Date.UTC(Math.floor(c/12),c%12,1));
+    o+='<option value="'+c+'">'+d.toLocaleDateString('en-US',{month:'long',year:'numeric',timeZone:'UTC'})+'</option>';
+  }
+  $('#monthsel').innerHTML=o;
+})();
+render();
+})();
+</script>
+</body>
+</html>
