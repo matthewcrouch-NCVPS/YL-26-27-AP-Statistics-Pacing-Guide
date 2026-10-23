@@ -27,26 +27,30 @@ h1{font:700 27px/1.1 var(--serif);margin:0;letter-spacing:-.01em}
 .brand{display:block;height:46px;width:auto;margin:0 0 10px}
 .ribbon{height:5px;border-radius:99px;margin:12px 0 0;background:linear-gradient(90deg,var(--green) 0 62%,var(--prac) 62% 100%)}
 .sub{margin:4px 0 0;color:var(--mut)}
-.btn{border:1px solid var(--ink);background:#fff;border-radius:8px;padding:7px 12px;font-weight:600}
+.btn{border:1px solid var(--ink);background:#fff;border-radius:8px;padding:5px 11px;font-size:13px;font-weight:600}
 .btn:hover{background:var(--ink);color:#fff}
 .policy{margin:10px 0 0;border:1px solid var(--line);border-radius:8px;background:var(--soft)}
 .policy summary{padding:8px 12px;cursor:pointer;font-weight:600}
 .policy p{margin:0;padding:0 12px 10px;max-width:70ch}
 
-/* at a glance */
-.glance{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin:12px 0}
-.g{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;text-align:left;display:block;width:100%}
-.g .k{display:block;color:var(--mut);font-size:12.5px}
-.g .v{display:block;font:700 24px/1.15 var(--serif);margin-top:2px}
-.g .s{display:block;color:var(--mut);font-size:12.5px;margin-top:2px}
-button.g:hover{border-color:var(--ink);background:var(--soft)}
-button.g.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
-.g.now .v{font-size:19px}
-.prog{height:7px;border-radius:99px;background:var(--line);margin-top:8px;overflow:hidden}
-.prog i{display:block;height:100%;background:var(--green)}
+/* today strip */
+.glance{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:12px 0 10px}
+.now{font-weight:700;margin-right:auto}
+.now span{color:var(--mut);font-weight:500}
+.gb{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-weight:600;font-size:13px}
+button.gb:hover{border-color:var(--ink);background:var(--soft)}
+.gb.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.gb.warn{background:var(--close-bg);color:var(--close-fg);border-color:#F0C9A8}
+.gb.mut{border:0;background:none;color:var(--mut);font-weight:500;padding-left:0;padding-right:0}
 
 /* year chart (week dotplot) */
-.chart-wrap{border:1px solid var(--line);border-radius:10px;padding:10px 10px 8px;margin-bottom:12px}
+.chart-wrap{border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+.chart-wrap>summary{list-style:none;cursor:pointer;padding:8px 12px;font-weight:600;display:flex;gap:8px;align-items:baseline}
+.chart-wrap>summary::-webkit-details-marker{display:none}
+.chart-wrap>summary::before{content:'▸';color:var(--mut)}
+.chart-wrap[open]>summary::before{content:'▾'}
+.hint{color:var(--mut);font-weight:400;font-size:12.5px}
+.cw{padding:0 10px 8px}
 .cap{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;justify-content:space-between;margin:0 2px 6px;color:var(--mut);font-size:12.5px}
 .cap b{color:var(--ink);font-size:13.5px}
 .key{display:inline-flex;gap:12px;align-items:center}
@@ -87,7 +91,8 @@ input[type=search]{min-width:150px;flex:1 1 150px;max-width:260px}
 .chip.learn{background:var(--learn-bg);color:var(--learn-fg)}
 .chip.practice{background:var(--prac-bg);color:var(--prac-fg)}
 .chip.assess{background:var(--assess-bg);color:var(--assess-fg)}
-.legend{margin:0 0 8px;color:var(--mut);font-size:12.5px}
+.legend{margin:10px 2px 0;color:var(--mut);font-size:12.5px}
+.cdl{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--close);margin-right:3px}
 .tag{display:inline-block;font-size:10.5px;font-weight:700;border-radius:3px;padding:0 5px;line-height:1.5;vertical-align:1px}
 .tag.due{background:var(--ink);color:#fff}
 .tag.cl{background:var(--close-bg);color:var(--close-fg);border-left:3px solid var(--close)}
@@ -148,8 +153,16 @@ input[type=search]{min-width:150px;flex:1 1 150px;max-width:260px}
 .ph p{margin:2px 0 0;color:var(--mut);font-size:12.5px}
 .link{border:0;background:none;color:#1C61B6;text-decoration:underline;padding:2px 0;font-weight:600}
 .note{color:var(--mut);font-size:12.5px;margin:2px 0 8px}
-.dayb{padding:9px 0 4px;border-top:1px solid var(--line)}
-.dayb.is-focus{background:#fff;border-radius:8px;border-top-color:transparent;box-shadow:0 0 0 2px var(--ink);padding:9px 8px 6px;margin:6px 0}
+.dayb{border-top:1px solid var(--line)}
+.dayb.is-focus{background:#fff;border-radius:8px;border-top-color:transparent;box-shadow:0 0 0 2px var(--ink);margin:6px 0;padding:0 8px}
+.dayb>summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;gap:2px 8px;align-items:baseline;padding:9px 2px}
+.dayb>summary::-webkit-details-marker{display:none}
+.dayb>summary::before{content:'▸';color:var(--mut);width:1em;flex:none}
+.dayb[open]>summary::before{content:'▾'}
+.dayb.is-empty .dh{padding:9px 2px}
+.dayb .ds{flex:1 1 100%;color:var(--mut);font-size:12.5px;font-weight:400;padding-left:calc(1em + 8px)}
+.dayb.is-empty .ds{flex:0 1 auto;padding-left:0}
+.dayb .db{padding:0 0 8px}
 .dh{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-weight:700}
 .dh .t{background:var(--today);color:#fff;border-radius:99px;padding:0 8px;font-size:11.5px}
 .dh .b{background:#E4E8EF;color:#3A4963;border-radius:99px;padding:0 8px;font-size:11.5px}
@@ -188,6 +201,20 @@ input[type=search]{min-width:150px;flex:1 1 150px;max-width:260px}
 .awb{padding:0 12px 10px}
 .foot{color:var(--mut);font-size:12.5px;margin:12px 2px 0}
 .empty{padding:18px 6px;text-align:center;color:var(--mut)}
+/* simplification layer */
+.tools{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:-2px 0 10px}
+.tools[hidden]{display:none}
+.cdot{position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:var(--close)}
+.pill.x{display:none}
+.pill.more{background:none;color:var(--mut);padding:0 2px;font-weight:700}
+.rd{min-width:0}
+.rd>summary{list-style:none;cursor:pointer}
+.rd>summary::-webkit-details-marker{display:none}
+.rd>summary .ttl::after{content:' ▸';color:#98A2B3;font-size:11px;font-weight:400}
+.rd[open]>summary .ttl::after{content:' ▾'}
+.due1{display:block;color:var(--mut);font-size:12px}
+.rx{margin-top:3px}
+@media (max-width:620px){.pill.x{display:flex}.pill.more{display:none}.cdot{top:4px;right:4px;width:7px;height:7px}}
 </style>
 </head>
 <body>
@@ -209,18 +236,21 @@ input[type=search]{min-width:150px;flex:1 1 150px;max-width:260px}
 
   <section class="glance" id="glance" aria-label="At a glance"></section>
 
-  <section class="chart-wrap" aria-label="Year at a glance">
-    <div class="cap">
-      <span><b>Work due each week.</b> Pick a week to see its details.</span>
-      <span class="key"><span><i style="background:var(--prac)"></i>Practice</span><span><i style="background:var(--assess)"></i>Checks &amp; tests</span><span>one dot = one item due</span></span>
+  <details class="chart-wrap" id="overview">
+    <summary>Year overview <span class="hint">every week at a glance</span></summary>
+    <div class="cw">
+      <div class="cap">
+        <span><b>Work due each week.</b> Pick a week to see its details.</span>
+        <span class="key"><span><i style="background:var(--prac)"></i>Practice</span><span><i style="background:var(--assess)"></i>Checks &amp; tests</span><span>one dot = one item due</span></span>
+      </div>
+      <div id="chart"></div>
     </div>
-    <div id="chart"></div>
-  </section>
+  </details>
 
   <div class="bar" role="toolbar" aria-label="Calendar controls">
     <div class="seg" role="group" aria-label="View">
       <button data-act="view-month" aria-pressed="true">Calendar</button>
-      <button data-act="view-agenda" aria-pressed="false">Week-by-week list</button>
+      <button data-act="view-agenda" aria-pressed="false">List</button>
     </div>
     <div class="nav" id="monthnav">
       <button class="ib" data-act="m-prev" aria-label="Previous month">‹</button>
@@ -228,6 +258,9 @@ input[type=search]{min-width:150px;flex:1 1 150px;max-width:260px}
       <button class="ib" data-act="m-next" aria-label="Next month">›</button>
       <button class="btn" data-act="today" style="padding:5px 10px">Today</button>
     </div>
+    <button class="btn" data-act="tools" id="toolsbtn" aria-expanded="false" aria-controls="tools" style="margin-left:auto">Search &amp; filter</button>
+  </div>
+  <div class="tools" id="tools" hidden>
     <input type="search" id="q" placeholder="Search lessons or assignments" aria-label="Search lessons or assignments">
     <div class="chips" id="chips" role="group" aria-label="Show or hide item types">
       <button class="chip learn" data-f="learn" aria-pressed="true">Notes &amp; CYK</button>
@@ -235,12 +268,12 @@ input[type=search]{min-width:150px;flex:1 1 150px;max-width:260px}
       <button class="chip assess" data-f="assess" aria-pressed="true">Checks &amp; tests</button>
     </div>
   </div>
-  <p class="legend"><span class="tag due">due</span> due that day &nbsp;·&nbsp; <span class="tag cl">closes</span> last day late work is accepted &nbsp;·&nbsp; the number on the left of each calendar row is the week.</p>
 
   <div class="main" id="main">
     <div id="cal"></div>
     <aside class="panel" id="panel" aria-live="polite"></aside>
   </div>
+  <p class="legend"><span class="tag due">due</span> due that day &nbsp;&nbsp; <span class="cdl"></span>late work closes that day &nbsp;&nbsp; Numbers down the left are weeks. Click any day for details.</p>
   <p class="foot" id="foot"></p>
 </div>
 
@@ -333,7 +366,7 @@ var state = {
   month: (function(){ var d=dd(clampN(TODAY)); return {y:d.getUTCFullYear(), m:d.getUTCMonth()}; })(),
   sel: {mode:'week', ws: curWs},
   focus: (TODAY>=startN && TODAY<=endN) ? TODAY : null,
-  q:'', f:{learn:true, practice:true, assess:true}
+  q:'', f:{learn:true, practice:true, assess:true}, tools:false
 };
 var minM = (function(){ var d=dd(startN); return d.getUTCFullYear()*12+d.getUTCMonth(); })();
 var maxM = (function(){ var d=dd(endN);   return d.getUTCFullYear()*12+d.getUTCMonth(); })();
@@ -391,16 +424,16 @@ function rowHTML(it, o){
   var st=status(it), dts='';
   var asg = it.n2!=null ? fShort(it.n)+' – '+fShort(it.n2) : fShort(it.n);
   dts += '<span><em>Assigned</em> '+asg+'</span>';
-  if(it.dueN!=null) dts += '<span><em>Due</em> '+fWd(it.dueN)+'</span>';
   if(it.clN!=null && it.clN!==it.dueN) dts += '<span class="c"><em>Closes</em> '+fWd(it.clN)+'</span>';
   var part='';
   if(it.n2!=null && o.day!=null) part=' <small>(day '+(o.day===it.n?'1':'2')+' of 2)</small>';
   var title=esc(it.t.replace(/\s+/g,' '));
+  var pre=(o.lesson && lno(it) && lno(it)!=='Start') ? esc(lno(it))+' ' : '';
+  var due1=it.dueN!=null ? '<span class="due1">Due '+fWd(it.dueN)+'</span>' : '';
   return '<div class="row g-'+it.g+(done[it.id]?' is-done':'')+'">'+
     '<input type="checkbox" data-id="'+esc(it.id)+'"'+(done[it.id]?' checked':'')+' aria-label="Mark '+title+' as done">'+
-    '<span><span class="ttl">'+title+part+'</span>'+
-    (o.lesson ? '<span class="les">'+esc(it.lesson)+'</span>' : '')+
-    '<span class="dts">'+dts+'</span></span>'+
+    '<details class="rd" data-k="r'+(o.ctx||'')+'|'+esc(it.id)+'"><summary><span class="ttl">'+pre+title+part+'</span>'+due1+'</summary>'+
+    '<div class="rx">'+(o.lesson ? '<span class="les">'+esc(it.lesson)+'</span>' : '')+'<span class="dts">'+dts+'</span></div></details>'+
     (st ? '<span class="st st-'+st.c+'">'+st.t+'</span>' : '')+
   '</div>';
 }
@@ -414,20 +447,26 @@ function dayHTML(n, o){
   var s=S(n), sched=s.sched.filter(vis), closes=s.cl.filter(vis), brk=breaks[n];
   var weekend = ((dd(n).getUTCDay()+6)%7) >= 5;
   if(weekend && !sched.length && !closes.length && !s.admin.length && !brk) return '';
-  var h='<section class="dayb'+(n===TODAY?' is-today':'')+(n===o.focus?' is-focus':'')+'" data-pd="'+n+'">'+
-    '<div class="dh"><span>'+fWd(n)+'</span>'+(n===TODAY?'<span class="t">Today</span>':'')+(brk?'<span class="b">'+esc(shortBrk(brk))+'</span>':'')+'</div>';
+  var tags=(n===TODAY?'<span class="t">Today</span>':'')+(brk?'<span class="b">'+esc(shortBrk(brk))+'</span>':'');
+  var cls='dayb'+(n===TODAY?' is-today':'')+(n===o.focus?' is-focus':'');
+  if(!sched.length && !closes.length && !s.admin.length){
+    return '<div class="'+cls+' is-empty" data-pd="'+n+'"><div class="dh"><span class="dn">'+fWd(n)+'</span>'+tags+'<span class="ds">'+(brk?'No class work':'Nothing scheduled')+'</span></div></div>';
+  }
+  var sum=dayParts(n).map(function(p){ return p.label+(p.tag?' (due)':''); });
+  s.admin.forEach(function(a){ sum.unshift(a.t); });
+  if(closes.length) sum.push('late work closes for '+closes.length);
+  var h='<details class="'+cls+'" data-pd="'+n+'" data-k="d'+n+(o.pre||'')+'"'+(o.open?' open':'')+'><summary class="dh"><span class="dn">'+fWd(n)+'</span>'+tags+'<span class="ds">'+esc(sum.join(' · '))+'</span></summary><div class="db">';
   if(closes.length){
     h+='<details class="closing" data-k="c'+n+(o.pre||'')+'"><summary>Late work closes today for '+plural(closes.length,'item')+'</summary>'+
-       closes.map(function(it){ return rowHTML(it,{lesson:true}); }).join('')+'</details>';
+       closes.map(function(it){ return rowHTML(it,{lesson:true,ctx:'c'+n+(o.pre||'')}); }).join('')+'</details>';
   }
   var last=null;
   sched.forEach(function(it){
     if(it.lesson!==last){ h+='<p class="lt">'+esc(it.lesson)+'</p>'; last=it.lesson; }
-    h+=rowHTML(it,{day:n});
+    h+=rowHTML(it,{day:n,ctx:'d'+n+(o.pre||'')});
   });
   s.admin.forEach(function(a){ h+=adminRow(a); });
-  if(!sched.length && !closes.length && !s.admin.length) h+='<p class="none">'+(brk?'No class work.':'Nothing scheduled.')+'</p>';
-  return h+'</section>';
+  return h+'</div></details>';
 }
 
 /* ---------- panel: week / list / search ---------- */
@@ -437,7 +476,12 @@ function weekHTML(ws, focus){
     '<div class="pt"><h2>Week '+wk+'</h2><p>'+fShort(ws)+' – '+fShort(ws+6)+' · Module '+mod+': '+esc(MOD[mod])+'</p></div>'+
     '<button class="ib" data-act="wk-next" aria-label="Next week"'+(wi>=NW-1?' disabled':'')+'>›</button></div>';
   if(ws!==curWs) h+='<button class="link" data-act="wk-now">Jump to this week</button>';
-  for(var i=0;i<7;i++) h+=dayHTML(ws+i,{focus:focus});
+  var openN=focus;
+  if(openN==null){
+    if(TODAY>=ws && TODAY<=ws+6) openN=TODAY;
+    else for(var j=0;j<5;j++){ var sj=S(ws+j); if(sj.sched.filter(vis).length||sj.due.filter(vis).length){ openN=ws+j; break; } }
+  }
+  for(var i=0;i<7;i++) h+=dayHTML(ws+i,{focus:focus, open:(ws+i===openN)});
   return h;
 }
 function listHTML(key){
@@ -476,15 +520,17 @@ function searchHTML(){
   return h;
 }
 function renderPanel(keepScroll){
-  var p=$('#panel'), top=p.scrollTop;
-  var open=$$('details[open]',p).map(function(d){ return d.getAttribute('data-k'); });
+  var p=$('#panel'), top=p.scrollTop, st={};
+  $$('details[data-k]',p).forEach(function(d){ st[d.getAttribute('data-k')]=d.open; });
   p.innerHTML = state.q.trim() ? searchHTML() : (state.sel.mode==='list' ? listHTML(state.sel.key) : weekHTML(state.sel.ws, state.focus));
-  $$('details',p).forEach(function(d){ if(open.indexOf(d.getAttribute('data-k'))>-1) d.open=true; });
-  if(keepScroll) p.scrollTop=top; else p.scrollTop=0;
+  if(keepScroll){
+    $$('details[data-k]',p).forEach(function(d){ var k=d.getAttribute('data-k'); if(k in st) d.open=st[k]; });
+    p.scrollTop=top;
+  } else p.scrollTop=0;
 }
 
 /* ---------- month grid ---------- */
-function pillsFor(n){
+function dayParts(n){
   var s=S(n), out=[], seen={};
   s.sched.filter(vis).forEach(function(it){
     var dim=!matchQ(it);
@@ -497,16 +543,21 @@ function pillsFor(n){
       out.push({g:it.g,lno:lno(it),parts:[shortT(it)+part],tag:it.dueN===n,dim:dim,allDone:!!done[it.id]});
     }
   });
-  var h=out.map(function(p){
-    var lab=(p.lno?p.lno+' ':'')+p.parts.join(' + ');
-    return '<span class="pill g-'+p.g+(p.allDone?' is-done':'')+(p.dim?' dim':'')+'" title="'+esc(lab)+'"><span class="pl">'+esc(lab)+'</span>'+(p.tag?'<span class="pt">due</span>':'')+'</span>';
-  });
+  out.forEach(function(p,i){ p.i=i; p.label=(p.lno?p.lno+' ':'')+p.parts.join(' + '); });
+  return out;
+}
+function prank(p){ return p.g==='assess'?1:(p.tag?2:(p.g==='practice'?3:4)); }
+function pillsFor(n){
+  var s=S(n), MAX=2, h=[];
   s.admin.forEach(function(a){
     h.push('<span class="pill g-info" title="'+esc(a.t)+'"><span class="pl">'+esc(a.t.replace(' due',''))+'</span></span>');
   });
-  var nc=s.cl.filter(vis).length;
-  if(nc) h.push('<span class="pill g-closes" title="'+plural(nc,'item')+' close for late work"><span class="pl">closes · '+nc+'</span></span>');
-  return h.join('');
+  dayParts(n).sort(function(a,b){ return prank(a)-prank(b) || a.i-b.i; }).forEach(function(p){
+    h.push('<span class="pill g-'+p.g+(p.allDone?' is-done':'')+(p.dim?' dim':'')+'" title="'+esc(p.label)+'"><span class="pl">'+esc(p.label)+'</span>'+(p.tag?'<span class="pt">due</span>':'')+'</span>');
+  });
+  var out=h.map(function(x,i){ return i<MAX ? x : x.replace('class="pill ','class="pill x '); }).join('');
+  if(h.length>MAX) out+='<span class="pill more">+'+(h.length-MAX)+' more</span>';
+  return out;
 }
 function renderMonth(){
   var y=state.month.y, m=state.month.m;
@@ -524,6 +575,7 @@ function renderMonth(){
       var lab=fWd(n)+(brk?', '+brk:'')+': '+plural(ct,'item')+(due?', '+due+' due':'')+(cl?', '+cl+' close':'');
       h+='<button class="day'+(inM?'':' out')+(brk?' brk':'')+(n===TODAY?' today':'')+(n===state.focus?' focus':'')+(selW?' insel':'')+(inC?'':' nocourse')+'" data-n="'+n+'" aria-label="'+esc(lab)+'">'+
         '<span class="num">'+dd(n).getUTCDate()+'</span>'+
+        (cl?'<span class="cdot" title="'+plural(cl,'item')+' close for late work"></span>':'')+
         (brk?'<span class="bl">'+esc(shortBrk(brk))+'</span>':'')+
         '<span class="pills">'+pillsFor(n)+'</span></button>';
     }
@@ -541,7 +593,7 @@ function renderAgenda(){
       if(q){ hits+=S(n).sched.filter(function(it){return vis(it)&&matchQ(it);}).length; }
     }
     if(q && !hits) continue;
-    for(var j=0;j<7;j++) body+=dayHTML(ws+j,{pre:'a'});
+    for(var j=0;j<7;j++) body+=dayHTML(ws+j,{pre:'a',open:true});
     var dues=weekDue(ws).filter(vis).length;
     var isOpen = q ? true : (ws===(state.sel.mode==='week'?state.sel.ws:curWs));
     h+='<details class="awk" data-ws="'+ws+'" data-k="w'+ws+'"'+(isOpen?' open':'')+'><summary><span>Week '+(w+1)+'</span><span class="m">'+fShort(ws)+' – '+fShort(ws+6)+' · Module '+weekMod[w]+'</span>'+
@@ -581,16 +633,14 @@ function renderGlance(){
   var wi=(curWs-ws0)/7, mod=weekMod[wi];
   var due7=items.filter(function(it){ return it.dueN!=null && it.dueN>=TODAY && it.dueN<=TODAY+6 && !done[it.id]; }).length;
   var past=items.filter(function(it){ return it.dueN!=null && it.dueN<TODAY && it.clN!=null && it.clN>=TODAY && !done[it.id]; }).length;
-  var mi=items.filter(function(it){ return it.m===mod; }), md=mi.filter(function(it){ return done[it.id]; }).length;
-  var pct=mi.length?Math.round(100*md/mi.length):0;
-  var now = inCourse
-    ? '<div class="g now"><span class="k">Today</span><span class="v">'+fWd(TODAY)+'</span><span class="s">Week '+(wi+1)+' · Module '+mod+': '+esc(MOD[mod])+'</span></div>'
-    : '<div class="g now"><span class="k">Course dates</span><span class="v">'+(TODAY<startN?'Starts '+fWd(startN):'Course has ended')+'</span><span class="s">'+fShort(startN)+' – '+fShort(endN)+'</span></div>';
   var on1=state.sel.mode==='list'&&state.sel.key==='due7', on2=state.sel.mode==='list'&&state.sel.key==='past';
-  $('#glance').innerHTML = now+
-    '<button class="g'+(on1?' on':'')+'" data-act="list-due7"><span class="k">Due in the next 7 days</span><span class="v">'+due7+'</span><span class="s">'+(due7?(due7===1?'item to finish':'items to finish')+', tap to see '+(due7===1?'it':'them'):'you’re all caught up')+'</span></button>'+
-    '<button class="g'+(on2?' on':'')+'" data-act="list-past"><span class="k">Past due, still open</span><span class="v">'+past+'</span><span class="s">'+(past?'can still be turned in, tap to see them':'nothing to catch up on')+'</span></button>'+
-    '<div class="g"><span class="k">Module '+mod+' checked off</span><span class="v">'+md+' of '+mi.length+'</span><div class="prog" role="img" aria-label="'+pct+' percent"><i style="width:'+pct+'%"></i></div></div>';
+  var now = inCourse
+    ? '<div class="now">'+fWd(TODAY)+' <span>· Week '+(wi+1)+' · Module '+mod+'</span></div>'
+    : '<div class="now">'+(TODAY<startN?'Course starts '+fWd(startN):'This course has ended')+'</div>';
+  var b1 = due7 ? '<button class="gb'+(on1?' on':'')+'" data-act="list-due7">'+plural(due7,'item')+' due in the next 7 days</button>'
+                : (inCourse ? '<span class="gb mut">Nothing due in the next 7 days</span>' : '');
+  var b2 = past ? '<button class="gb warn'+(on2?' on':'')+'" data-act="list-past">'+past+' past due, still open</button>' : '';
+  $('#glance').innerHTML = now+b1+b2;
 }
 
 /* ---------- toolbar state + footer ---------- */
@@ -602,6 +652,9 @@ function renderControls(){
   $('[data-act="m-prev"]').disabled = cur<=minM; $('[data-act="m-next"]').disabled = cur>=maxM;
   $('#monthnav').style.display = state.view==='month' ? '' : 'none';
   $('#main').className = 'main'+(state.view==='agenda'?' agenda':'');
+  $('#tools').hidden = !state.tools;
+  var tb=$('#toolsbtn'); tb.setAttribute('aria-expanded', state.tools?'true':'false');
+  tb.innerHTML = 'Search &amp; filter'+((state.q.trim()||!(state.f.learn&&state.f.practice&&state.f.assess))?' •':'');
   $('#foot').textContent = store
     ? 'Boxes you check are saved in this browser only, so they won’t show up on another device.'
     : 'Check marks can’t be saved in this view, so they reset when the page reloads.';
@@ -675,6 +728,7 @@ document.addEventListener('click', function(e){
   if((el=t.closest('[data-act]'))){
     var a=el.getAttribute('data-act');
     if(a==='ics') downloadICS();
+    else if(a==='tools'){ state.tools=!state.tools; renderControls(); if(state.tools) $('#q').focus(); }
     else if(a==='view-month'||a==='view-agenda'){ state.view=a==='view-month'?'month':'agenda'; if(state.sel.mode==='week') setMonthFor(state.sel.ws); render(); }
     else if(a==='m-prev'||a==='m-next'){ var c=state.month.y*12+state.month.m+(a==='m-next'?1:-1); if(c<minM||c>maxM) return; state.month={y:Math.floor(c/12), m:c%12}; renderControls(); renderMonth(); }
     else if(a==='today'){ state.focus=(TODAY>=startN&&TODAY<=endN)?TODAY:null; selectWeek(curWs, state.focus, true); }
